@@ -1089,4 +1089,4 @@ WinUp is an open-source project. Contributions are welcome!
 
 ## License
 
-This project is licensed under the Apache 2.0 License. 
+This project is licensed under the MIT License. See **LICENSE** for more information.
