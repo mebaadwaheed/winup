@@ -61,7 +61,23 @@ def ShowcaseApp():
     # --- Final Layout ---
     return ui.Column(props={"spacing": 20, "margin": "20px"}, children=[
         random_file_finder, 
-        form
+        form,
+        ui.ExpandablePanel(
+            "Expandable Panel",
+            children=[
+                ui.Column(props={"spacing": 10}, children=[
+                    ui.Label("This is inside the expandable panel!"),
+                    ui.Input(props={"placeholder": "You can put widgets here"})
+                ])
+            ]
+        ),
+        ui.Carousel(
+            children=[
+                ui.Label("Page 1", props={"background-color": "#f0f0f0", "alignment": "AlignCenter", "height": 100}),
+                ui.Label("Page 2", props={"background-color": "#e0e0e0", "alignment": "AlignCenter", "height": 100}),
+                ui.Label("Page 3", props={"background-color": "#d0d0d0", "alignment": "AlignCenter", "height": 100}),
+            ]
+        )
     ])
 
 if __name__ == "__main__":

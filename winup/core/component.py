@@ -14,6 +14,10 @@ class Component(QWidget):
         self.on_unmount_handler = on_unmount
         self.child_component = None # The actual rendered widget from the user's function
         
+        # Set the object name if 'id' is provided in props, for CSS styling
+        if "id" in self.props:
+            self.setObjectName(str(self.props["id"]))
+
         # Every component gets a default layout
         layout = QVBoxLayout()
         layout.setContentsMargins(0, 0, 0, 0)
@@ -99,4 +103,7 @@ def component(func):
         # The lifecycle hooks are now picked up from the returned widget inside Component.render
         return Component(render_function, props)
 
+    # Attach the original function's signature to the wrapper.
+    # This helps avoid recursion issues with `inspect.signature` on decorated functions.
+    wrapper.__signature__ = inspect.signature(func)
     return wrapper 

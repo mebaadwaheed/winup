@@ -24,6 +24,8 @@ from .widgets.combobox import ComboBox as DefaultComboBox
 from .widgets.switch import Switch as DefaultSwitch
 from .widgets.tabview import TabView as DefaultTabView
 from .widgets.scroll_view import ScrollView as DefaultScrollView
+from .widgets.carousel import Carousel as DefaultCarousel
+from .widgets.expandable_panel import ExpandablePanel as DefaultExpandablePanel
 
 # Import graph widgets
 from .widgets.graphs.bar_chart import BarChart as DefaultBarChart
@@ -48,6 +50,9 @@ _WIDGET_REGISTRY = {
     "TabView": DefaultTabView,
     "Textarea": DefaultTextarea,
     "ComboBox": DefaultComboBox,
+    "Carousel": DefaultCarousel,
+    "ExpandablePanel": DefaultExpandablePanel,
+    # Layout widgets
     "Column": DefaultColumn,
     "Row": DefaultRow,
     "Stack": DefaultStack,
@@ -127,4 +132,4 @@ def create_component(base_widget_func: callable, default_props: dict):
         # Pass the merged props to the base widget
         return base_widget_func(*args, props=final_props, **kwargs)
 
-    return new_component_func 
+    return new_component_func

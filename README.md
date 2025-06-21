@@ -247,6 +247,52 @@ def App():
 # Example: winup.run(main_component_path="graph_demo:App", title="Scatter Plot Demo")
 ```
 
+### Advanced Widgets
+
+WinUp also provides more complex, pre-built components for common UI patterns.
+
+**Carousel**
+The `Carousel` widget allows you to create a slideshow or a sequence of components that the user can navigate through.
+
+```python
+import winup
+from winup import ui
+
+def App():
+    return ui.Carousel(
+        children=[
+            ui.Label("Page 1", props={"background-color": "#f0f0f0", "alignment": "AlignCenter", "height": 150}),
+            ui.Label("Page 2", props={"background-color": "#e0e0e0", "alignment": "AlignCenter", "height": 150}),
+            ui.Label("Page 3", props={"background-color": "#d0d0d0", "alignment": "AlignCenter", "height": 150}),
+        ]
+    )
+
+# To run this, you would need a WinUp app instance.
+# Example: winup.run(main_component_path="carousel_demo:App", title="Carousel Demo")
+```
+
+**Expandable Panel**
+The `ExpandablePanel` is a container that can be collapsed or expanded by the user, useful for hiding and showing content.
+
+```python
+import winup
+from winup import ui
+
+def App():
+    return ui.ExpandablePanel(
+        "Click to Expand",
+        children=[
+            ui.Column(props={"spacing": 10, "margin": "10px"}, children=[
+                ui.Label("This content was hidden!"),
+                ui.Input(props={"placeholder": "You can place any widget inside."})
+            ])
+        ]
+    )
+
+# To run this, you would need a WinUp app instance.
+# Example: winup.run(main_component_path="expandable_demo:App", title="Expandable Panel Demo")
+```
+
 ---
 
 ## Installation
@@ -404,6 +450,27 @@ winup.style.add_style_dict({
 # Use the class in a component
 def App():
     return ui.Button("Primary Button", props={"class": "btn-primary"})
+```
+
+**Styling with an ID**
+
+For targeting a single, specific widget, you can use the `id` prop. This is equivalent to an ID in HTML/CSS and is the most specific selector. In your stylesheet, you target it with a `#` prefix.
+
+```python
+# Add a style rule for a specific widget ID
+winup.style.add_style_dict({
+    "#special-button": {
+        "border": "2px dashed #FF5722",
+        "font-size": "16px"
+    }
+})
+
+# Apply the ID to one specific instance
+def App():
+    return ui.Column(children=[
+        ui.Button("Normal Button"),
+        ui.Button("Special Button", props={"id": "special-button"})
+    ])
 ```
 
 ### Theming and Dynamic Styling
@@ -895,6 +962,56 @@ def App():
 if __name__ == "__main__":
     # You need to create the router files first for this to work.
     winup.run(main_component_path="multi_page_app:App", title="Multi-Page App Demo")
+```
+
+**Nested Routing and Layouts**
+
+For more complex applications, you often need nested views (e.g., an "Account" section with its own sub-navigation for "Profile" and "Billing"). The router supports this through a layout-based approach.
+
+Instead of nesting `RouterView` components, the recommended pattern is to create a **layout component** that accepts a `child_view` function as a prop. Each route then renders the layout component, passing in the specific child page it should display.
+
+This approach is more explicit, easier to reason about, and avoids potential recursion issues.
+
+```python
+# nested_routing_app.py
+import winup
+from winup import ui
+from winup.router import Router, RouterView, RouterLink
+from typing import Callable
+
+# 1. Define the pages
+@winup.component
+def DetailsPage():
+    return ui.Label("Your account details.")
+
+@winup.component
+def BillingPage():
+    return ui.Label("Your billing information.")
+
+# 2. Create the shared layout component
+@winup.component
+def AccountLayout(router: Router, child_view: Callable):
+    """A layout that contains sub-navigation and renders a child view."""
+    return ui.Column(props={"spacing": 10}, children=[
+        ui.Label("Account Settings", props={"font-weight": "bold"}),
+        ui.Row(children=[
+            RouterLink(router, "/account/details", "Details"),
+            RouterLink(router, "/account/billing", "Billing"),
+        ]),
+        # Render the specific child page here
+        ui.Frame(props={"border": "1px solid #eee", "padding": "10px"}, children=[
+            child_view()
+        ])
+    ])
+
+# 3. Define the routes using the layout
+app_router = Router({
+    # Each route renders the layout with a different child
+    "/account/details": lambda: AccountLayout(router=app_router, child_view=DetailsPage),
+    "/account/billing": lambda: AccountLayout(router=app_router, child_view=BillingPage),
+    # Add a redirect for the base path
+    "/account": {"redirect": "/account/details"},
+})
 ```
 
 ### Component Lifecycle Hooks: `on_mount` and `on_unmount`

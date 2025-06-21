@@ -1,6 +1,7 @@
 # tests/routing_test.py
 import winup
 from winup import ui
+from typing import Callable
 
 # Since the router files might not have been created automatically,
 # we need to handle the import gracefully.
@@ -61,11 +62,44 @@ def SettingsPage():
         on_unmount=on_unmount
     )
 
+# 4. Define components for nested routing
+@winup.component
+def AccountLayout(router: Router, child_view: Callable):
+    """A layout component for account pages that renders a child view."""
+    return ui.Column(props={"spacing": 10}, children=[
+        ui.Label("Account Management", props={"font-size": "16px", "font-weight": "bold"}),
+        ui.Row(
+            props={"spacing": 15},
+            children=[
+                RouterLink(router=router, to="/account/details", text="Account Details"),
+                RouterLink(router=router, to="/account/billing", text="Billing Info"),
+            ]
+        ),
+        ui.Frame(props={"padding": "10px", "border": "1px solid #ccc"}, children=[
+            child_view()  # Render the child component passed to the layout
+        ])
+    ])
+
+@winup.component
+def AccountDetailsPage():
+    return ui.Label("This is where your account details would be.")
+
+@winup.component
+def BillingPage():
+    return ui.Label("This is where your billing information would be.")
+
 # 2. Create a router instance with your routes
 app_router = Router({
     "/": HomePage,
     "/profile": ProfilePage,
     "/settings": SettingsPage,
+    # For nested routes, we define a route for each page that uses the layout
+    "/account/details": lambda: AccountLayout(router=app_router, child_view=AccountDetailsPage),
+    "/account/billing": lambda: AccountLayout(router=app_router, child_view=BillingPage),
+    # Redirect example
+    "/me": {"redirect": "/profile"},
+    # Redirect for the base /account path
+    "/account": {"redirect": "/account/details"},
 })
 
 # 3. Build the main application layout
@@ -80,7 +114,9 @@ def App():
                 children=[
                     RouterLink(router=app_router, to="/", text="Home"),
                     RouterLink(router=app_router, to="/profile", text="Profile"),
-                    RouterLink(router=app_router, to="/settings", text="Settings")
+                    RouterLink(router=app_router, to="/settings", text="Settings"),
+                    RouterLink(router=app_router, to="/account", text="Account"),
+                    RouterLink(router=app_router, to="/me", text="My Profile (Redirect)"),
                 ]
             ),
             # Add a separator

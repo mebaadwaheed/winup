@@ -91,6 +91,27 @@ def create_traits_demo_tab():
         draggable_frame
     ])
 
+def create_id_demo_tab():
+    """This component demonstrates using the 'id' prop for styling."""
+    
+    # Add a style rule specifically targeting the ID '#special-label'
+    winup.style.add_style_dict({
+        "#special-label": {
+            "background-color": "#FFDDC1",
+            "border": "2px dashed #FF5722",
+            "padding": "10px",
+            "font-weight": "bold",
+        }
+    })
+    
+    return ui.Column(props={"spacing": 15, "margin": "20px"}, children=[
+        ui.Label("ID Prop Styling Demo", props={"font-size": "16px", "font-weight": "bold"}),
+        ui.Label(
+            "This label is styled with an ID selector.",
+            props={"id": "special-label"}
+        )
+    ])
+
 # --- 2. Define the Main Application Component ---
 
 def App():
@@ -99,10 +120,12 @@ def App():
     # Create the content for each tab
     widgets_tab = create_widgets_demo_tab()
     traits_tab = create_traits_demo_tab()
+    id_tab = create_id_demo_tab()
 
     return ui.TabView(tabs={
         "New Widgets": widgets_tab,
-        "Traits Demo": traits_tab
+        "Traits Demo": traits_tab,
+        "ID Demo": id_tab,
     })
 
 # --- 3. Run the App ---

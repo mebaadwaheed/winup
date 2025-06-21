@@ -5,42 +5,86 @@ from winup import ui
 from winup.core.component import Component
 from winup.ui import clear_layout
 import re
+import inspect
 
 class Router:
     """Manages navigation and application state for different UI views."""
-    def __init__(self, routes: Dict[str, Callable[..., Component]]):
+    def __init__(self, routes: Dict[str, any]):
         if not routes:
             raise ValueError("Router must be initialized with at least one route.")
         
         self.routes = self._compile_routes(routes)
-        initial_path = list(routes.keys())[0]
-        
-        # Use WinUp's state manager to make the current route reactive.
+        # Find the first path that doesn't have a redirect.
+        initial_path = next((original_path for _, _, _, original_path, redirect in self.routes if not redirect), list(routes.keys())[0])
+
         self.state = winup.state.create("router_current_path", initial_path)
 
-    def _compile_routes(self, routes: Dict[str, Callable[..., Component]]):
-        """Compiles route strings into regex for path matching."""
-        compiled_routes = []
-        for path, component_factory in routes.items():
-            param_keys = re.findall(r":(\w+)", path)
-            # Replace /:param with a regex capture group
-            regex_path = re.sub(r":\w+", r"([^/]+)", path) + "$"
-            compiled_routes.append((re.compile(regex_path), param_keys, component_factory))
-        return compiled_routes
+    def _compile_routes(self, routes: Dict, base_path: str = ""):
+        """
+        Recursively compiles route strings into regex, handling nested routes.
+        Each route can be a component or a dict with 'component' and 'children'.
+        It can also contain a 'redirect' key.
+        """
+        compiled = []
+        for path, value in routes.items():
+            current_path = f"{base_path}{path}".replace("//", "/")
+            
+            component_factory = None
+            children = {}
+            redirect = None
+
+            if isinstance(value, dict):
+                component_factory = value.get("component")
+                children = value.get("children", {})
+                redirect = value.get("redirect")
+            else:
+                component_factory = value
+            
+            if component_factory or redirect:
+                param_keys = re.findall(r":(\w+)", current_path)
+                regex_path = re.sub(r":\w+", r"([^/]+)", current_path) + "$"
+                compiled.append((re.compile(regex_path), param_keys, component_factory, current_path, redirect))
+
+            if children:
+                compiled.extend(self._compile_routes(children, base_path=current_path))
+        
+        return compiled
 
     def navigate(self, path: str):
-        """Navigates to the given path, matching against registered routes."""
-        if self.get_component_for_path(path):
+        """Navigates to the given path, handling redirects and matching against registered routes."""
+        component, params, redirect = self._get_route_info_for_path(path)
+        
+        if redirect:
+            self.navigate(redirect) # Recursive call for the new path
+            return
+
+        if component:
             self.state.set(path)
         else:
             print(f"Error: Route for '{path}' not found.")
 
+    def _get_route_info_for_path(self, path: str) -> tuple[Optional[Callable], Optional[dict], Optional[str]]:
+        """Finds route info for a given path: (component, params, redirect)."""
+        for regex, param_keys, component_factory, original_path, redirect in self.routes:
+            match = regex.match(path)
+            if match:
+                param_values = match.groups()
+                params = dict(zip(param_keys, param_values))
+                # Check for a redirect first
+                if redirect:
+                    # Perform parameter substitution in the redirect path
+                    for key, val in params.items():
+                        redirect = redirect.replace(f":{key}", val)
+                    return None, None, redirect
+                return component_factory, params, None
+        return None, None, None
+
     def get_component_for_path(self, path: str) -> Optional[tuple[Callable[..., Component], dict]]:
         """
         Finds the component factory for a given path and extracts route parameters.
-        Returns a tuple of (component_factory, params) or None if no match is found.
+        This is used by RouterView. It ignores redirects as navigation is already complete.
         """
-        for regex, param_keys, component_factory in self.routes:
+        for regex, param_keys, component_factory, _, _ in self.routes:
             match = regex.match(path)
             if match:
                 param_values = match.groups()
@@ -67,9 +111,16 @@ def RouterView(router: Router) -> Component:
             if view_container.layout() is not None:
                 ui.clear_layout(view_container.layout())
             
+            # Check if the component needs the router instance passed to it
+            # Use the pre-computed __signature__ to avoid recursion with inspect.
+            if hasattr(component_factory, '__signature__'):
+                sig = component_factory.__signature__
+                if 'router' in sig.parameters:
+                    params['router'] = router
+
             # Instantiate and add the new component, passing params to it
             new_component = component_factory(**params)
-            view_container.add_child(new_component)
+            view_container.layout().addWidget(new_component)
 
     # Subscribe to changes in the router's state.
     router.state.subscribe(_update_view)
