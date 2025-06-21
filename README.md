@@ -38,9 +38,9 @@ Desktop development in Python can feel clunky. WinUp was built to fix that.
 
 # 🧊 WinUp vs 🧱 PyEdifice (Reddit User Request)
 
-| Feature                          | WinUp (with your improvements)       | PyEdifice                        |
+| Feature                          | WinUp      | PyEdifice                        |
 |----------------------------------|--------------------------------------|----------------------------------|
-| 🧱 Architecture                  | React-style w/ plugins + state       | React-style + state              |
+| 🧱 Architecture                  | React-style + state       | React-style + state              |
 | 🌐 Built-in Routing              | ✅ Yes (`Router(routes={...})`)      | ❌ No built-in routing            |
 | ♻️ Lifecycle Hooks               | ✅ `on_mount`, `on_unmount`, etc.    | ⚠️ Limited (`did_mount`, etc.)   |
 | 🎨 Theming / Styling System     | ✅ Global & Scoped themes             | ❌ Manual CSS injection           |
