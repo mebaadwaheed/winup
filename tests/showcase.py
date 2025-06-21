@@ -75,7 +75,7 @@ def ShowcaseApp():
             children=[
                 ui.Label("Page 1", props={"background-color": "#f0f0f0", "alignment": "AlignCenter", "height": 100}),
                 ui.Label("Page 2", props={"background-color": "#e0e0e0", "alignment": "AlignCenter", "height": 100}),
-                ui.Label("Page 3", props={"background-color": "#d0d0d0", "alignment": "AlignCenter", "height": 100}),
+           ui.Label("Page 3", props={"background-color": "#d0d0d0", "alignment": "AlignCenter", "height": 100}),
             ]
         )
     ])

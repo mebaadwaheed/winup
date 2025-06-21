@@ -1,3 +1,10 @@
+# Version 2.4.3 **(MAJOR):**
+- Added Carousel Widget for creating swipeable, animated page views.
+- Added ExpandablePanel Widget for creating collapsible content sections.
+- Enhanced the Router with support for Nested Routing and Redirects.
+- Added `id` prop to all components for direct styling via ID selectors.
+## Contributors: @mebaadwaheed
+
 # Version 2.3.3 **(MAJOR):**
 - Added Graphing and Charting Widgets
 - Fixed some bugs
