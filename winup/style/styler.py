@@ -226,6 +226,16 @@ class Styler:
                 widget.setFont(font)
             else:
                 print(f"Warning: Unknown font-weight '{weight_name}'.", file=sys.stderr)
+        
+        if "read-only" in themed_props:
+            if hasattr(widget, 'setReadOnly'):
+                is_read_only = themed_props.pop("read-only")
+                # Ensure the value is a boolean
+                widget.setReadOnly(bool(is_read_only))
+            else:
+                # Remove it anyway so it doesn't become invalid QSS
+                themed_props.pop("read-only")
+                print(f"Warning: 'read-only' prop used on a widget that doesn't support it.", file=sys.stderr)
 
         # The rest of the props are assumed to be direct CSS properties
         style_str = ""

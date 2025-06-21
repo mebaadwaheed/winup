@@ -82,6 +82,81 @@ Desktop development in Python can feel clunky. WinUp was built to fix that.
 
 ---
 
+## Built-in Tools
+
+WinUp comes with a set of pre-built tools to handle common application needs, such as interacting with the webcam or the filesystem.
+
+### Filesystem Tool
+
+The `winup.tools.filesystem` module provides a simple, cross-platform API for common file operations.
+
+```python
+from winup.tools import filesystem
+
+# Create a directory
+filesystem.create_dir("my_app_data")
+
+# Write to a file
+filesystem.write_file("my_app_data/config.txt", "Hello, World!")
+
+# Read from a file
+content = filesystem.read_file("my_app_data/config.txt") # "Hello, World!"
+
+# Work with JSON
+data = {"theme": "dark", "version": 1}
+filesystem.write_json("my_app_data/settings.json", data)
+settings = filesystem.read_json("my_app_data/settings.json")
+
+# Check if a file exists
+if filesystem.exists("my_app_data/settings.json"):
+    print("Settings file found!")
+
+# Clean up
+filesystem.remove("my_app_data")
+```
+
+### Camera Tool
+
+The `winup.tools.camera.Camera` class makes it easy to capture images from the system's webcam. It requires `opencv-python` and `numpy`.
+
+```python
+import winup
+from winup import ui
+from winup.tools.camera import Camera
+
+@winup.component
+def CameraView():
+    # Create a label to display the camera feed
+    image_label = ui.Label()
+
+    def capture_and_display():
+        try:
+            # Initialize the camera
+            cam = Camera() 
+            
+            # Capture a single frame
+            pixmap = cam.capture_frame() # Returns a QPixmap
+            
+            if pixmap:
+                # Display the captured frame in the label
+                image_label.set_pixmap(pixmap)
+            
+            # Clean up the camera resource
+            cam.release()
+        except IOError as e:
+            image_label.set_text(f"Error: {e}")
+
+    return ui.Column(children=[
+        image_label,
+        ui.Button("Capture Frame", on_click=capture_and_display)
+    ])
+
+# To run this, you would need a WinUp app instance
+# winup.run(main_component=CameraView)
+```
+
+---
+
 ## Installation
 
 ```bash
@@ -866,7 +941,7 @@ def App():
     ])
 
 if __name__ == "__main__":
-    winup.run(App, title="Animation Demo")
+    winup.run(main_component_path="file_name:App", title="Animation Demo")
 ```
 
 ---
@@ -923,3 +998,4 @@ WinUp is an open-source project. Contributions are welcome!
 ## License
 
 This project is licensed under the Apache 2.0 License. 
+```

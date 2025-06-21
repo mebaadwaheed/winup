@@ -5,7 +5,7 @@ This allows developers to override default widgets with their own custom impleme
 
 from PySide6.QtWidgets import QWidget
 from functools import partial
-from winup.style.styler import merge_props
+from winup.style.styler import merge_props, styler
 
 # Default widget implementations
 from .widgets.button import Button as DefaultButton
@@ -83,9 +83,14 @@ def create_widget(name: str, *args, **kwargs):
     # Intercept lifecycle hooks before they are passed to the widget's constructor.
     on_mount_handler = kwargs.pop("on_mount", None)
     on_unmount_handler = kwargs.pop("on_unmount", None)
+    props = kwargs.pop("props", None)
 
     # Create the widget with the remaining safe kwargs.
     widget_instance = widget_class(*args, **kwargs)
+
+    # Apply style properties if they exist.
+    if props:
+        styler.apply_props(widget_instance, props)
     
     # Attach the hooks to the instance itself for the component decorator to find.
     if on_mount_handler:
