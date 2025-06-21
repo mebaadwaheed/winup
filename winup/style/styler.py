@@ -4,6 +4,7 @@ from PySide6.QtCore import Qt
 from PySide6.QtGui import QCursor, QFont
 # Import the class, not the module, to avoid the cycle
 from .theming import ThemeManager
+from winup.ui.layout_managers import VBox, HBox
 
 # --- Style Constants ---
 # Provide framework-level access to common Qt constants to avoid direct Qt imports in user code.

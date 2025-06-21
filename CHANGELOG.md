@@ -1,3 +1,10 @@
+# Version 2.3.3 **(MAJOR):**
+- Added Graphing and Charting Widgets
+- Fixed some bugs
+## Contributors: @mebaadwaheed
+
+## Minor Patches for 2.2.2 and 2.2.3!
+
 # Version 2.2.1 **(MAJOR):**
 - Refactored State Management with State Objects
 - Added Routing

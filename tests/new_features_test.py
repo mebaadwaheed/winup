@@ -49,6 +49,10 @@ def create_traits_demo_tab():
         '[hover="true"]': {
             "background-color": "#E8F5E9", # A light green
             "border": "1px solid #4CAF50",
+        },
+        ".highlighted": {
+            "background-color": "#FFF9C4", # A light yellow
+            "color": "black", # Ensure text is readable
         }
     })
 
@@ -105,7 +109,7 @@ def App():
 
 if __name__ == "__main__":
     winup.run(
-        main_component=App,
+        main_component_path="new_features_test:App",
         title="New Widgets & Traits Demo",
         width=450,
         height=300

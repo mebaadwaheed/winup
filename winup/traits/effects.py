@@ -1,5 +1,6 @@
 from .base import Trait
 from PySide6.QtWidgets import QWidget
+from PySide6.QtCore import Qt
 from ..style import styler as style_manager
 
 class HoverEffectTrait(Trait):
@@ -16,12 +17,12 @@ class HoverEffectTrait(Trait):
         widget.leaveEvent = self._leaveEvent
 
     def _enterEvent(self, event):
-        style_manager.set_dynamic_property(self.widget, "hover", True)
+        style_manager.toggle_class(self.widget, "hover", True)
         if self._original_enterEvent:
             self._original_enterEvent(event)
 
     def _leaveEvent(self, event):
-        style_manager.set_dynamic_property(self.widget, "hover", False)
+        style_manager.toggle_class(self.widget, "hover", False)
         if self._original_leaveEvent:
             self._original_leaveEvent(event)
 
@@ -36,12 +37,16 @@ class HighlightableTrait(Trait):
     """
     def apply(self, widget: QWidget):
         super().apply(widget)
+        # Allow the widget's text to be selected by the mouse
+        widget.setTextInteractionFlags(Qt.TextSelectableByMouse)
         self.highlighted = False
 
     def toggle(self, highlighted: bool):
         self.highlighted = highlighted
-        style_manager.set_dynamic_property(self.widget, "highlighted", self.highlighted)
+        style_manager.toggle_class(self.widget, "highlighted", self.highlighted)
 
     def remove(self):
         self.toggle(False) # Ensure highlight is removed
+        # Restore default behavior
+        self.widget.setTextInteractionFlags(Qt.NoTextInteraction)
         super().remove() 

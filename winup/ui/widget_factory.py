@@ -25,6 +25,12 @@ from .widgets.switch import Switch as DefaultSwitch
 from .widgets.tabview import TabView as DefaultTabView
 from .widgets.scroll_view import ScrollView as DefaultScrollView
 
+# Import graph widgets
+from .widgets.graphs.bar_chart import BarChart as DefaultBarChart
+from .widgets.graphs.line_chart import LineChart as DefaultLineChart
+from .widgets.graphs.pie_chart import PieChart as DefaultPieChart
+from .widgets.graphs.scatter_plot import ScatterPlot as DefaultScatterPlot
+
 # The central registry for widget classes
 _WIDGET_REGISTRY = {
     "Button": DefaultButton,
@@ -46,6 +52,11 @@ _WIDGET_REGISTRY = {
     "Row": DefaultRow,
     "Stack": DefaultStack,
     "Grid": DefaultGrid,
+    # Graphing Widgets
+    "BarChart": DefaultBarChart,
+    "LineChart": DefaultLineChart,
+    "PieChart": DefaultPieChart,
+    "ScatterPlot": DefaultScatterPlot,
 }
 
 def register_widget(name: str, widget_class: type):
@@ -83,14 +94,9 @@ def create_widget(name: str, *args, **kwargs):
     # Intercept lifecycle hooks before they are passed to the widget's constructor.
     on_mount_handler = kwargs.pop("on_mount", None)
     on_unmount_handler = kwargs.pop("on_unmount", None)
-    props = kwargs.pop("props", None)
 
-    # Create the widget with the remaining safe kwargs.
+    # Create the widget. The widget's __init__ is now responsible for handling all props.
     widget_instance = widget_class(*args, **kwargs)
-
-    # Apply style properties if they exist.
-    if props:
-        styler.apply_props(widget_instance, props)
     
     # Attach the hooks to the instance itself for the component decorator to find.
     if on_mount_handler:

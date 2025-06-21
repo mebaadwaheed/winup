@@ -72,7 +72,7 @@ if __name__ == "__main__":
     })
     
     winup.run(
-        main_component=ShowcaseApp,
+        main_component_path="showcase:ShowcaseApp",
         title="WinUp Feature Showcase",
         width=800,
         height=600

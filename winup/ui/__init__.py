@@ -5,34 +5,12 @@ This package exposes all the available UI widgets, layouts, and dialogs
 through a factory system to allow for custom widget implementations.
 """
 from .widget_factory import register_widget, create_widget, create_component
-from .layouts import Row, Column, Stack, Grid
+from .layouts import VBox, HBox
 from .utils import clear_layout
 from winup.style.styler import merge_props
 
-# Low-level Layouts (usually not overridden)
-from .layout_managers import VBox, HBox
-
 # Dialogs
 from . import dialogs
-
-# Import widgets
-from .widgets.button import Button
-from .widgets.calendar import Calendar
-from .widgets.checkbox import Checkbox
-from .widgets.combobox import ComboBox
-from .widgets.deck import Deck
-from .widgets.frame import Frame
-from .widgets.image import Image
-from .widgets.input import Input
-from .widgets.label import Label
-from .widgets.link import Link
-from .widgets.progress_bar import ProgressBar
-from .widgets.radio_button import RadioButton
-from .widgets.scroll_view import ScrollView
-from .widgets.slider import Slider
-from .widgets.switch import Switch
-from .widgets.tabview import TabView
-from .widgets.textarea import Textarea
 
 # --- Public API ---
 # These are factory functions, not classes. They create widgets from the registry.
@@ -56,33 +34,27 @@ def Switch(*args, **kwargs): return create_widget("Switch", *args, **kwargs)
 def TabView(*args, **kwargs): return create_widget("TabView", *args, **kwargs)
 def Textarea(*args, **kwargs): return create_widget("Textarea", *args, **kwargs)
 
+# Layouts
+def Column(*args, **kwargs): return create_widget("Column", *args, **kwargs)
+def Row(*args, **kwargs): return create_widget("Row", *args, **kwargs)
+def Stack(*args, **kwargs): return create_widget("Stack", *args, **kwargs)
+def Grid(*args, **kwargs): return create_widget("Grid", *args, **kwargs)
+
+# Graphing Widgets
+def BarChart(*args, **kwargs): return create_widget("BarChart", *args, **kwargs)
+def LineChart(*args, **kwargs): return create_widget("LineChart", *args, **kwargs)
+def PieChart(*args, **kwargs): return create_widget("PieChart", *args, **kwargs)
+def ScatterPlot(*args, **kwargs): return create_widget("ScatterPlot", *args, **kwargs)
+
+
 # Expose all factory functions and the registration function for discoverability.
 __all__ = [
     "register_widget",
     "create_component",
-    "Button",
-    "Calendar",
-    "Checkbox",
-    "ComboBox",
-    "Deck",
-    "Frame",
-    "Image",
-    "Input",
-    "Label",
-    "Link",
-    "ProgressBar",
-    "RadioButton",
-    "ScrollView",
-    "Slider",
-    "Switch",
-    "TabView",
-    "Textarea",
-    "Row",
-    "Column",
-    "Stack",
-    "Grid",
-    "clear_layout",
-    "dialogs",
-    "VBox",
-    "HBox",
+    "Button", "Calendar", "Checkbox", "ComboBox", "Deck", "Frame", "Image",
+    "Input", "Label", "Link", "ProgressBar", "RadioButton", "ScrollView",
+    "Slider", "Switch", "TabView", "Textarea",
+    "Row", "Column", "Stack", "Grid",
+    "BarChart", "LineChart", "PieChart", "ScatterPlot",
+    "clear_layout", "dialogs", "VBox", "HBox", "merge_props"
 ] 
