@@ -14,6 +14,7 @@ from PySide6.QtWidgets import (
     QVBoxLayout,
     QWidget,
 )
+from winup import style
 
 # No longer using fx for the carousel transition to allow for a cross-fade.
 # from winup.animate import fx
@@ -26,12 +27,24 @@ class Carousel(QWidget):
 
     slideChanged = Signal(int)
 
-    def __init__(self, parent: QWidget = None, children: list = None):
+    def __init__(
+        self,
+        parent: QWidget = None,
+        children: list = None,
+        animation_duration: int = 400,
+        autoplay_ms: int = 0,
+        show_nav_buttons: bool = True,
+        show_indicators: bool = True,
+        nav_button_props: dict = None,
+        indicator_props: dict = None,
+    ):
         super().__init__(parent)
         self._slides = []
         self._currentIndex = -1
-        self._animation_duration = 400  # Slightly faster for a snappier feel
+        self._animation_duration = animation_duration
         self._is_animating = False
+        self._nav_button_props = nav_button_props or {}
+        self._indicator_props = indicator_props or {}
 
         # Main Layout
         self.main_layout = QVBoxLayout(self)
@@ -55,6 +68,9 @@ class Carousel(QWidget):
         self.prev_button.setProperty("class", "carousel-nav-button")
         self.next_button = QPushButton(">")
         self.next_button.setProperty("class", "carousel-nav-button")
+        
+        style.styler.apply_props(self.prev_button, self._nav_button_props)
+        style.styler.apply_props(self.next_button, self._nav_button_props)
 
         self.indicator_layout = QHBoxLayout()
         self.indicator_layout.setAlignment(Qt.AlignmentFlag.AlignCenter)
@@ -66,6 +82,13 @@ class Carousel(QWidget):
         self.nav_layout.addWidget(self.next_button)
         self.main_layout.addWidget(self.nav_frame)
 
+        # Hide controls if requested
+        if not show_nav_buttons:
+            self.prev_button.hide()
+            self.next_button.hide()
+        if not show_indicators:
+            self.indicator_layout.hide()
+
         # Connections
         self.prev_button.clicked.connect(self.show_previous)
         self.next_button.clicked.connect(self.show_next)
@@ -73,6 +96,8 @@ class Carousel(QWidget):
         # Autoplay
         self.autoplay_timer = QTimer(self)
         self.autoplay_timer.timeout.connect(self.show_next)
+        if autoplay_ms > 0:
+            self.set_autoplay(autoplay_ms)
 
         # Add initial slides if provided
         if children:
@@ -104,6 +129,10 @@ class Carousel(QWidget):
         indicator.setCheckable(True)
         indicator.setProperty("class", "carousel-indicator")
         indicator.setFixedSize(10, 10)
+        
+        # Apply custom styles
+        style.styler.apply_props(indicator, self._indicator_props)
+
         indicator_index = len(self._slides) - 1
         indicator.clicked.connect(lambda: self.go_to(indicator_index))
         self.indicator_layout.addWidget(indicator)
