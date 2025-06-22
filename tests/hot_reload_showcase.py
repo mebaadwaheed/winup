@@ -6,10 +6,10 @@ from winup import ui
 def App():
     """
     A simple component that displays a label.
-    Try changing the text below, save the file, and the UI should update instantly.
+    Try changing the text below, save the fle, and the UI should update instantly.
     """
     return ui.Label(
-        "Hello, inUp Hot Reload! It's kng!",
+        "Hello, WinUp Hot Reload! It's working!",
         props={"font-size": "24px", "alignment": "AlignCenter"}
     )
 

@@ -8,6 +8,7 @@ from .widget_factory import register_widget, create_widget, create_component
 from .layouts import VBox, HBox
 from .utils import clear_layout
 from winup.style.styler import merge_props
+from winup.core.memoize import memo
 
 # Dialogs
 from . import dialogs
@@ -21,10 +22,14 @@ def Calendar(*args, **kwargs): return create_widget("Calendar", *args, **kwargs)
 def Checkbox(*args, **kwargs): return create_widget("Checkbox", *args, **kwargs)
 def ComboBox(*args, **kwargs): return create_widget("ComboBox", *args, **kwargs)
 def Deck(*args, **kwargs): return create_widget("Deck", *args, **kwargs)
+@memo
 def Frame(*args, **kwargs): return create_widget("Frame", *args, **kwargs)
+@memo
 def Image(*args, **kwargs): return create_widget("Image", *args, **kwargs)
 def Input(*args, **kwargs): return create_widget("Input", *args, **kwargs)
+@memo
 def Label(*args, **kwargs): return create_widget("Label", *args, **kwargs)
+@memo
 def Link(*args, **kwargs): return create_widget("Link", *args, **kwargs)
 def ProgressBar(*args, **kwargs): return create_widget("ProgressBar", *args, **kwargs)
 def RadioButton(*args, **kwargs): return create_widget("RadioButton", *args, **kwargs)

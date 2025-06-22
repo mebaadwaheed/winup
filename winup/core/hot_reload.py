@@ -6,6 +6,7 @@ when source code files change.
 """
 import sys
 import importlib
+import traceback
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
 import os
@@ -20,11 +21,18 @@ def _import_from_string(import_str: str):
     if not module_str or not attr_str:
         raise ImportError(f"Invalid import string '{import_str}'. Must be in 'module.path:attribute' format.")
     
-    print(f"[Hot Reload] Importing '{attr_str}' from '{module_str}'")
-    module = importlib.import_module(module_str)
-    # The module might have been reloaded, so we need to get the fresh object.
-    importlib.reload(module)
-    return getattr(module, attr_str)
+    try:
+        print(f"[Hot Reload] Importing '{attr_str}' from '{module_str}'")
+        module = importlib.import_module(module_str)
+        # The module might have been reloaded, so we need to get the fresh object.
+        importlib.reload(module)
+        return getattr(module, attr_str)
+    except ImportError as e:
+        print(f"[Hot Reload] Error importing module '{module_str}': {e}")
+        raise
+    except AttributeError:
+        print(f"[Hot Reload] Error: Attribute '{attr_str}' not found in module '{module_str}'.")
+        raise
 
 
 # --- NEW: Signal Emitter for Cross-Thread Communication ---
@@ -109,12 +117,13 @@ class _HotReloadService:
         
         # --- NEW: More robust module finding ---
         module_to_reload = None
-        # Normalize the path for reliable comparison
-        normalized_path = os.path.normpath(file_path)
+        # Normalize the path for reliable comparison, and convert to lowercase
+        normalized_path = os.path.normpath(file_path).lower()
 
         for module in sys.modules.values():
             if hasattr(module, '__file__') and module.__file__:
-                if os.path.normpath(module.__file__) == normalized_path:
+                # Compare lowercase paths to handle case-insensitivity on Windows
+                if os.path.normpath(module.__file__).lower() == normalized_path:
                     module_to_reload = module
                     break
         
@@ -131,8 +140,9 @@ class _HotReloadService:
                 # Emit signal to trigger callback on the main thread
                 self.signal_emitter.reload_requested.emit()
 
-            except Exception as e:
-                print(f"[Hot Reload] Error: {e}")
+            except Exception:
+                print(f"[Hot Reload] Error reloading module.")
+                traceback.print_exc()
         else:
             print(f"Warning: Could not find module for path {file_path}")
 

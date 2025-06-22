@@ -63,6 +63,9 @@ def run(main_component_path: str, title="WinUp App", width=800, height=600, icon
             """
             nonlocal main_component
             try:
+                # Clear the cache to prevent using deleted C++ objects
+                clear_memo_cache()
+                
                 print("[Hot Reload] Reloading UI on main thread...")
                 
                 # Dynamically get the LATEST version of the component
