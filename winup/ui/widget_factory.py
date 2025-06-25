@@ -11,6 +11,7 @@ from winup.style.styler import merge_props, styler
 from .widgets.button import Button as DefaultButton
 from .widgets.calendar import Calendar as DefaultCalendar
 from .widgets.deck import Deck as DefaultDeck
+from .widgets.dock import Dock as DefaultDock
 from .widgets.frame import Frame as DefaultFrame
 from .widgets.image import Image as DefaultImage
 from .widgets.input import Input as DefaultInput
@@ -38,6 +39,7 @@ _WIDGET_REGISTRY = {
     "Button": DefaultButton,
     "Calendar": DefaultCalendar,
     "Deck": DefaultDeck,
+    "Dock": DefaultDock,
     "Frame": DefaultFrame,
     "Image": DefaultImage,
     "Input": DefaultInput,

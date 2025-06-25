@@ -105,8 +105,6 @@ def RouterView(router: Router) -> Component:
 
     def _update_view(path: str):
         """Clears the container and renders the new component with route params."""
-        clear_memo_cache()
-        
         result = router.get_component_for_path(path)
         if result:
             component_factory, params = result

@@ -1,3 +1,8 @@
+# Version 2.5.5 **MINOR:**
+- Added Docks
+- Fixed `taskflow.py` C++ Label Error
+# Contributors: @mebaadwaheed
+
 # Version 2.4.4 **(MINOR):**
 - Better Error Handling, especially for LHR
 - Better Optimization in Memo
