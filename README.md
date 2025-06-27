@@ -82,11 +82,25 @@ Desktop development in Python can feel clunky. WinUp was built to fix that.
 
 ---
 
-# More Info
+# Documentation
 
-[Getting Started](docs/gettingstarted.md)
-[Components](docs/components.md)
-[Core Concepts](docs/concepts.md)
+Dive deeper into the features of WinUp:
+
+## Core Concepts
+- [**Component Model & Styling**](docs/concepts.md)
+- [**State Management**](docs/state.md)
+- [**Lifecycle Hooks**](docs/concepts.md#component-lifecycle-hooks-on_mount-and-on_unmount)
+- [**Routing**](docs/concepts.md#routing)
+- [**Absolute Positioning (Advanced)**](docs/absolute-layout.md)
+
+## Developer Tools
+- [**Live Hot Reload (LHR)**](docs/live-hot-reload.md)
+- [**Performance Profiler**](docs/profiler.md)
+- [**Memoization**](docs/memoization.md)
+- [**Async Task Runner**](docs/tasks.md)
+
+## UI Components
+- [**Full Component Library**](docs/components/README.md)
 
 ---
 

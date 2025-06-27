@@ -1,6 +1,7 @@
 # Advanced Widgets
 
 WinUp also provides more complex, pre-built components for common UI patterns.
+For more information read their respective file documentation in the docs/components/widgets folder.
 
 ## Dock Widget
 The `Dock` widget allows you to create dockable toolbars or panels around a central content area, similar to IDEs or creative software.

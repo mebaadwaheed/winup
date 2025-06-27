@@ -227,6 +227,21 @@ class Styler:
                 widget.setFont(font)
             else:
                 print(f"Warning: Unknown font-weight '{weight_name}'.", file=sys.stderr)
+        if "font-size" in themed_props:
+            size_str = themed_props.pop("font-size")
+            font = widget.font()
+            try:
+                # Assuming size is in pixels, e.g., "16px"
+                if isinstance(size_str, str) and "px" in size_str:
+                    point_size = int(size_str.replace("px", "").strip())
+                    font.setPointSize(point_size)
+                    widget.setFont(font)
+                else:
+                    # Handle integer or string without px
+                    font.setPointSize(int(size_str))
+                    widget.setFont(font)
+            except (ValueError, TypeError) as e:
+                 print(f"Warning: Invalid font-size value '{size_str}': {e}", file=sys.stderr)
         
         if "read-only" in themed_props:
             if hasattr(widget, 'setReadOnly'):

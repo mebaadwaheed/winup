@@ -1,4 +1,10 @@
-# Version 2.4.5 **MINOR:**
+# Version 2.4.5 **(MINOR):**
+- Fixed `winup init` CLI Command
+- Added more Documentation
+- Added `place_child()` for frame if you want full absolute positioning
+# Contributors: @mebaadwaheed, @jkrilov
+
+# Version 2.4.5 **(MINOR):**
 - Added Docks
 - Fixed `taskflow.py` C++ Label Error
 # Contributors: @mebaadwaheed

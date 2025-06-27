@@ -3,7 +3,7 @@ from .layout_managers import VBox, HBox, StackBox, GridBox
 
 class Column(Frame):
     """A Frame that arranges child widgets vertically using a VBox layout."""
-    def __init__(self, children: list = None, props: dict = None, **kwargs):
+    def __init__(self, children: list = None, props: dict = None, parent=None, **kwargs):
         # Separate frame props from layout props
         frame_props = props.copy() if props else {}
         layout_props = {
@@ -13,7 +13,7 @@ class Column(Frame):
         }
         layout_props = {k: v for k, v in layout_props.items() if v is not None}
         
-        super().__init__(props=frame_props, **kwargs)
+        super().__init__(props=frame_props, parent=parent, **kwargs)
         
         self.set_layout(VBox(props=layout_props))
         if children:
@@ -27,7 +27,7 @@ class Column(Frame):
 
 class Row(Frame):
     """A Frame that arranges child widgets horizontally using an HBox layout."""
-    def __init__(self, children: list = None, props: dict = None, **kwargs):
+    def __init__(self, children: list = None, props: dict = None, parent=None, **kwargs):
         # Separate frame props from layout props
         frame_props = props.copy() if props else {}
         layout_props = {
@@ -37,7 +37,7 @@ class Row(Frame):
         }
         layout_props = {k: v for k, v in layout_props.items() if v is not None}
         
-        super().__init__(props=frame_props, **kwargs)
+        super().__init__(props=frame_props, parent=parent, **kwargs)
 
         self.set_layout(HBox(props=layout_props))
         if children:

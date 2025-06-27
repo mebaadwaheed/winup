@@ -3,16 +3,15 @@ from ..layout_managers import VBox, HBox
 from ... import style
 
 class Frame(QFrame):
-    def __init__(self, children: list = None, props: dict = None, **kwargs):
+    def __init__(self, children: list = None, props: dict = None, parent: QWidget = None, **kwargs):
         # All custom keyword arguments will be treated as style properties.
         # This is a more robust way to handle styling.
         if props is None:
             props = {}
         props.update(kwargs)
 
-        # Now that all kwargs are in props, call the parent constructor with no arguments
-        # to prevent passing any custom properties to Qt.
-        super().__init__()
+        # Now that all kwargs are in props, call the parent constructor with the parent argument.
+        super().__init__(parent)
         
         # Intercept and handle lifecycle hooks from the combined props
         on_mount = props.pop('on_mount', None)
@@ -109,3 +108,24 @@ class Frame(QFrame):
             # For other layouts (like Stacked or Grid), just add the widgets without stretch.
             for child in children:
                 self.layout().addWidget(child)
+
+    def place_child(self, child: QWidget, x: int, y: int, width: int = None, height: int = None):
+        """
+        Places a child widget at absolute coordinates within the Frame.
+        This method ONLY works if the Frame has NO layout manager set.
+        """
+        if self.layout() is not None:
+            raise RuntimeError(
+                "Cannot use .place_child() on a Frame that has a layout manager. "
+                "For absolute positioning, create a Frame with no layout."
+            )
+        
+        child.setParent(self)
+        
+        # If width/height are not provided, use the child's size hint
+        size_hint = child.sizeHint()
+        effective_width = width if width is not None else size_hint.width()
+        effective_height = height if height is not None else size_hint.height()
+
+        child.setGeometry(x, y, effective_width, effective_height)
+        child.show()

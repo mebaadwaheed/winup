@@ -674,184 +674,149 @@ app_router = Router({
 
 ## Component Lifecycle Hooks: `on_mount` and `on_unmount`
 
-To manage side effects—like fetching data, setting up timers, or starting animations—WinUp components now have lifecycle hooks. These are special functions you can pass to a component that run at specific times.
+For more complex components that need to perform actions when they are created or destroyed (like fetching data, starting a timer, or cleaning up resources), WinUp provides two lifecycle hooks: `on_mount` and `on_unmount`.
 
-*   `on_mount`: This function is called exactly once, right after the component's UI has been created and added to the scene (i.e., it has "mounted"). It's the perfect place to load data or start animations.
-*   `on_unmount`: This function is called exactly once, just before the component is destroyed and removed from the scene. It's essential for cleanup tasks, like canceling network requests, invalidating timers, or saving state.
+You can pass these as functions to any component that uses a `Frame` as its base (which includes `Column` and `Row`).
+
+*   `on_mount`: This function is called exactly once, right after the component's UI has been created and added to the scene (i.e., it has "mounted"). It's the perfect place to load initial data, set up subscriptions, or start animations.
+*   `on_unmount`: This function is called when the component is about to be permanently removed from the scene. It's crucial for cleanup tasks, such as unsubscribing from state, clearing timers, or closing connections, to prevent memory leaks.
 
 **Example: A Self-Updating Clock**
 
 This example demonstrates how to use `on_mount` to start a timer and `on_unmount` to clean it up, preventing memory leaks.
 
 ```python
-# lifecycle_demo.py
-import winup
-from winup import ui, state
 from PySide6.QtCore import QTimer
+from winup import ui, winup
+import datetime
 
 @winup.component
 def Clock():
-    # 1. A state to hold the current time string
-    time_state = state.create("current_time", "Loading...")
+    time_label = ui.Label("Loading...")
     
-    # 2. A variable to hold our QTimer instance
-    timer = None
+    # Create a QTimer instance
+    timer = QTimer()
 
     def update_time():
-        # This function will be called by the timer
-        import datetime
         now = datetime.datetime.now()
-        time_state.set(now.strftime("%H:%M:%S"))
+        time_label.set_text(now.strftime("%H:%M:%S"))
 
     def on_mount():
-        nonlocal timer
-        print("Clock Mounted: Starting timer.")
-        # Create and start the timer when the component appears
-        timer = QTimer()
+        # This code runs when the Clock component is first displayed
+        print("Clock mounted: Starting timer.")
+        # Call update_time immediately and then every second
+        update_time()
         timer.timeout.connect(update_time)
-        timer.start(1000) # Update every 1000 ms (1 second)
-        update_time() # Initial update
+        timer.start(1000) # 1000 ms = 1 second
 
     def on_unmount():
-        nonlocal timer
-        print("Clock Unmounted: Stopping timer.")
-        # Stop the timer when the component disappears to avoid errors
-        if timer:
-            timer.stop()
-            timer = None
-
-    # 3. Create a label and bind its text to our state
-    time_label = ui.Label()
-    time_state.bind_to(time_label, 'text', lambda t: f"Current Time: {t}")
-
-    # 4. Pass the hooks to the component container
+        # This code runs when the Clock component is destroyed
+        print("Clock unmounted: Stopping timer.")
+        timer.stop()
+        
     return ui.Frame(
         children=[time_label],
         on_mount=on_mount,
-        on_unmount=on_unmount
+        on_unmount=on_unmount,
+        props={"padding": "10px", "border": "1px solid #ccc"}
     )
+```
 
-# A simple app to show/hide the clock to test the hooks
+## Routing
+
+WinUp includes a simple but powerful router for creating multi-page applications. The router manages a `Deck` widget, switching its visible page based on the current "route" (a string like `"/home"` or `"/settings"`).
+
+**1. Defining Routes**
+
+First, you define your pages as components. Then, you create a dictionary mapping route paths to these page components.
+
+```python
+from winup import ui, winup, router
+
+# Define page components
+@winup.component
+def HomePage():
+    return ui.Label("Welcome to the Home Page!")
+
+@winup.component
+def SettingsPage():
+    return ui.Label("This is the Settings Page.")
+
+# Define the route dictionary
+routes = {
+    "/": HomePage,
+    "/settings": SettingsPage,
+}
+```
+
+**2. Creating the Router and View**
+
+Next, you create a `Router` instance with your routes and a `RouterView`. The `RouterView` is the component that will display the current page.
+
+```python
+# Create the router instance
+main_router = router.Router(routes)
+
+# Create the main application component
+@winup.component
 def App():
-    visibility_state = state.create("clock_visible", True)
-
-    def toggle_clock():
-        visibility_state.set(not visibility_state.get())
-
-    placeholder = ui.Frame(props={"min-height": "50px"})
-    
-    def on_visibility_change(is_visible):
-        clear_layout(placeholder.layout())
-        if is_visible:
-            placeholder.add_child(Clock())
-        else:
-            placeholder.add_child(ui.Label("Clock is hidden."))
-            
-    visibility_state.subscribe(on_visibility_change)
-    on_visibility_change(visibility_state.get()) # Initial render
-
     return ui.Column(children=[
-        ui.Button("Toggle Clock", on_click=toggle_clock),
-        placeholder
+        # Navigation controls
+        ui.Row(children=[
+            ui.Button("Go to Home", on_click=lambda: main_router.navigate("/")),
+            ui.Button("Go to Settings", on_click=lambda: main_router.navigate("/settings")),
+        ]),
+        
+        # The view that displays the current page
+        router.RouterView(main_router)
     ])
-
-if __name__ == "__main__":
-    # You will need to import clear_layout from winup.core.hot_reload
-    from winup.core.hot_reload import clear_layout 
-    winup.run(main_component_path="lifecycle_demo:App", title="Lifecycle Demo")
 ```
 
-## Built-in Animations & Effects
+**3. Navigating**
 
-WinUp provides a simple API for creating smooth animations, located in the `winup.animate.fx` module. You can easily fade widgets in and out or animate any of their properties.
+You can change the current page by calling the `router.navigate()` method. This is typically done in the `on_click` handler of a `Button` or `Link`. The `RouterView` will automatically update to show the correct page component.
 
-**Example: Fading and Moving**
+## Advanced: Absolute Positioning with `.place_child()`
 
-This example shows how to use `fade_in`, `fade_out`, and the generic `animate` function to move a widget.
+While WinUp's layout system (`Row`, `Column`, `Grid`) is recommended for most UIs, sometimes you need pixel-perfect control. For these cases, you can use a layout-less `Frame` as a canvas and place widgets at absolute coordinates using the `.place_child()` method.
+
+**This is an advanced feature. Only use it when standard layouts are not sufficient.**
+
+**How it Works**
+
+1.  Create a `Frame` instance **without** passing any `children` or a `layout` prop. This creates a "canvas" container.
+2.  Use the `frame.place_child()` method to add widgets to it.
 
 ```python
-# animation_demo.py
-import winup
-from winup import ui
-from winup.animate import fx # Import the animation functions
-from PySide6.QtCore import QRect
+from winup import ui, winup
 
-def App():
+@winup.component
+def AbsoluteLayoutExample():
+    # 1. Create a layout-less Frame to act as the canvas.
+    #    Give it a fixed size and some style to make it visible.
+    canvas = ui.Frame(props={
+        "min-width": "400px",
+        "min-height": "300px",
+        "background-color": "#2c3e50"
+    })
+
+    # 2. Create the widgets you want to place.
+    label = ui.Label("I am at a precise location.", props={"color": "white"})
+    button = ui.Button("You can overlap me!")
+
+    # 3. Place them on the canvas at x, y coordinates.
+    canvas.place_child(label, x=50, y=20)
+    canvas.place_child(button, x=40, y=100)
+
+    # You can even place widgets on top of each other.
+    another_label = ui.Label("I'm on top!", props={"background-color": "red", "padding": "5px"})
+    canvas.place_child(another_label, x=130, y=90)
     
-    animated_label = ui.Label(
-        "Animate Me!",
-        props={"padding": "20px", "background-color": "#ADD8E6"}
-    )
-    
-    def slide_in():
-        # Animate the widget's geometry (position and size)
-        start_rect = animated_label.geometry()
-        end_rect = QRect(20, 20, start_rect.width(), start_rect.height())
-        fx.animate(animated_label, b"geometry", end_rect, 500)
-
-    # Place the label in a container with a null layout for manual positioning
-    container = ui.Frame(
-        props={"layout": "null"},
-        children=[animated_label]
-    )
-    
-    # Start the label faded out
-    fx.fade_out(animated_label, duration=0)
-
-    return ui.Column(props={"margin":"20px", "spacing": 10}, children=[
-        container,
-        ui.Row(props={"spacing": 10}, children=[
-            ui.Button("Fade In", on_click=lambda: fx.fade_in(animated_label, 300)),
-            ui.Button("Fade Out", on_click=lambda: fx.fade_out(animated_label, 300)),
-            ui.Button("Slide In", on_click=slide_in),
-        ])
-    ])
-
-if __name__ == "__main__":
-    winup.run(main_component_path="animation_demo:App", title="Animation Demo")
+    return canvas
 ```
 
----
+### `place_child(child, x, y, width=None, height=None)`
 
-# Hot Reloading for Development
-
-WinUp includes a powerful hot-reloading feature to accelerate development. When enabled, any changes you make to your component files will be reflected instantly in your running application without needing a manual restart.
-
-## How it Works
-
-The hot-reloading service monitors your project's Python files. When a change is detected, it intelligently reloads the necessary modules and redraws the UI, preserving the application's state. This is ideal for iterating quickly on UI design and component logic.
-
-## Enabling Hot Reload
-
-To enable hot reloading, you must run your application in development mode. This is done by passing `dev=True` to the `winup.run()` function.
-
-You also need to provide the main component as a string path in the format `"path.to.module:ComponentName"`. This allows WinUp to dynamically re-import your component when the source file changes.
-
-## Example
-
-Here is how you would structure your main application script to use hot reloading:
-
-```python
-# main.py
-import winup
-import sys
-import os
-
-# Assume 'my_app' is your components package
-from my_app.my_component import App 
-
-if __name__ == "__main__":
-    # Add the project root to the path to ensure modules can be found
-    project_root = os.path.abspath(os.path.dirname(__file__))
-    if project_root not in sys.path:
-        sys.path.insert(0, project_root)
-
-    # Run the app with hot reloading enabled
-    winup.run(
-        main_component_path="my_app.my_component:App",
-        title="My App with Hot Reload",
-        dev=True
-    )
-```
-
-Now, when you run `python main.py`, any changes you make to `my_app/my_component.py` (or any other component file) will be reflected instantly.
+- `child`: The widget instance to place.
+- `x`, `y`: The integer coordinates from the top-left corner of the `Frame`.
+- `width`, `height` (optional): If provided, the widget will be resized. If not, the widget's default `sizeHint` will be used.

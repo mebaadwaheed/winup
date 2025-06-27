@@ -104,7 +104,7 @@ sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')
 
 import winup
 from winup import ui
-from app.components.card import Card
+from components.card import Card
 
 @winup.component
 def App():
@@ -118,7 +118,7 @@ def App():
     )
 
 if __name__ == "__main__":
-    winup.run(main_component=App, title="{project_name}")
+    winup.run(main_component_path="app.main:App", title="{project_name}", dev=True)
 """
 
 BASE_COMPONENT_CONTENT = """
@@ -134,7 +134,7 @@ def Card(text: str):
             "border-radius": "10px"
         },
         children=[
-            ui.Label(text)
+            ui.Label(text, props={"font-size": 24})
         ]
     )
 """
@@ -161,7 +161,7 @@ def init():
     ).ask()
 
     use_icepack = questionary.confirm(
-        "Use Icepack 0.1.0 for plugin management(Wont work fully yet...)?",
+        "Use Icepack 0.1.0 for plugin management (Wont work fully yet...)?",
         default=False
     ).ask()
 

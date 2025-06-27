@@ -1,11 +1,11 @@
 [project]
 name = "winup"
-version = "2.4.5"
+version = "2.4.6"
 description = "A powerful, .exe Desktop Application Python GUI framework built on top of PySide6."
 authors = [
     { name = "ebaadwaheed", email = "ebaadalt@gmail.com" }
 ]
-license = { text = "Apache-2.0" }
+license = { text = "MIT" }
 readme = "README.md"
 requires-python = ">=3.9"
 
@@ -20,7 +20,8 @@ dependencies = [
     "questionary",
     "websockets",
     "numpy",
-    "opencv-python"
+    "opencv-python",
+    "pyinstaller"
 ]
 
 [project.urls]

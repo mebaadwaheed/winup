@@ -10,6 +10,7 @@ from winup.style.styler import merge_props, styler
 # Default widget implementations
 from .widgets.button import Button as DefaultButton
 from .widgets.calendar import Calendar as DefaultCalendar
+from .widgets.checkbox import Checkbox as DefaultCheckbox
 from .widgets.deck import Deck as DefaultDeck
 from .widgets.dock import Dock as DefaultDock
 from .widgets.frame import Frame as DefaultFrame
@@ -18,6 +19,7 @@ from .widgets.input import Input as DefaultInput
 from .widgets.label import Label as DefaultLabel
 from .widgets.link import Link as DefaultLink
 from .widgets.progress_bar import ProgressBar as DefaultProgressBar
+from .widgets.radio_button import RadioButton as DefaultRadioButton
 from .widgets.slider import Slider as DefaultSlider
 from .widgets.textarea import Textarea as DefaultTextarea
 from .layouts import Column as DefaultColumn, Row as DefaultRow, Stack as DefaultStack, Grid as DefaultGrid
@@ -38,6 +40,7 @@ from .widgets.graphs.scatter_plot import ScatterPlot as DefaultScatterPlot
 _WIDGET_REGISTRY = {
     "Button": DefaultButton,
     "Calendar": DefaultCalendar,
+    "Checkbox": DefaultCheckbox,
     "Deck": DefaultDeck,
     "Dock": DefaultDock,
     "Frame": DefaultFrame,
@@ -46,6 +49,7 @@ _WIDGET_REGISTRY = {
     "Label": DefaultLabel,
     "Link": DefaultLink,
     "ProgressBar": DefaultProgressBar,
+    "RadioButton": DefaultRadioButton,
     "ScrollView": DefaultScrollView,
     "Slider": DefaultSlider,
     "Switch": DefaultSwitch,
