@@ -23,6 +23,8 @@
 
 WinUp is a modern UI framework for Python that wraps the power of PySide6 (Qt) in a simple, declarative, and developer-friendly API. It's designed to let you build applications faster, write cleaner code, and enjoy the development process.
 
+[Contributing](CONTRIBUTING.md)
+
 ---
 
 ## Why WinUp? (Instead of raw PySide6 or Tkinter)
