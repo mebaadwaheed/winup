@@ -1,13 +1,18 @@
-# Version 2.4.5 **(MINOR):**
+# Version 2.4.7 LSR **(MINOR):**
+- Start of Latest Stable Release, from now on for versions that have LFR (Latest Forefeit Release) will be the latest non LSR builds, you usually have to wait three days when all bugs and all features are fixed and implemented properly. Everything below this is stable.
+- Added TreeView, ColorPicker and List widgets.
+## Contributors: @mebaadwaheed
+
+# Version 2.4.6 **(MINOR):**
 - Fixed `winup init` CLI Command
 - Added more Documentation
 - Added `place_child()` for frame if you want full absolute positioning
-# Contributors: @mebaadwaheed, @jkrilov
+## Contributors: @mebaadwaheed, @jkrilov
 
 # Version 2.4.5 **(MINOR):**
 - Added Docks
 - Fixed `taskflow.py` C++ Label Error
-# Contributors: @mebaadwaheed
+## Contributors: @mebaadwaheed
 
 # Version 2.4.4 **(MINOR):**
 - Better Error Handling, especially for LHR

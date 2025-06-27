@@ -29,6 +29,46 @@ DARK_THEME = {
     "error-color": "#EF5350",
 }
 
+# Default styles for base Qt widgets that WinUp components use.
+# These use theme variables so they adapt automatically.
+DEFAULT_WIDGET_STYLES = {
+    "QMainWindow": {
+        "background-color": "$background-color",
+    },
+    "QLabel": {
+        "color": "$text-color",
+    },
+    "QListWidget": {
+        "background-color": "$secondary-color",
+        "color": "$secondary-text-color",
+        "border": "1px solid $border-color",
+        "border-radius": "4px",
+    },
+    "QTreeWidget": {
+        "background-color": "$secondary-color",
+        "color": "$secondary-text-color",
+        "border": "1px solid $border-color",
+        "border-radius": "4px",
+    },
+    "QTreeView::item:selected": {
+        "background-color": "$primary-color",
+        "color": "$primary-text-color",
+    },
+    "QPushButton": {
+        "background-color": "$secondary-color",
+        "color": "$secondary-text-color",
+        "border": "1px solid $border-color",
+        "padding": "5px 10px",
+        "border-radius": "4px",
+    },
+    "QPushButton:hover": {
+        "background-color": "$hover-color",
+    },
+    "QColorDialog": {
+        "background-color": "$background-color",
+    }
+}
+
 class ThemeManager:
     """Manages application-wide themes and variable substitution."""
     

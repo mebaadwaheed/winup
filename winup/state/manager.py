@@ -1,5 +1,6 @@
 from PySide6.QtWidgets import QWidget, QLineEdit, QCheckBox
 from typing import TypeVar, Generic
+from winup.style.styler import styler
 
 T = TypeVar('T')
 
@@ -190,6 +191,11 @@ class StateManager:
 
     def _set_widget_property(self, widget, property_name, value):
         """Helper to set a property on a widget, trying setter method first."""
+        # Special handling for the 'style' property
+        if property_name == 'style' and isinstance(value, dict):
+            styler.apply_props(widget, value)
+            return
+
         setter = getattr(widget, f"set{property_name.capitalize()}", None)
         try:
             if setter and callable(setter):

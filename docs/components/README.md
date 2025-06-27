@@ -17,6 +17,9 @@ This section provides detailed documentation for all the standard UI components 
 - [Link](./widgets/link.md)
 - [ProgressBar](./widgets/progressbar.md)
 - [Calendar](./widgets/calendar.md)
+- [ColorPicker](./widgets/color_picker.md)
+- [List](./widgets/list.md)
+- [TreeView](./widgets/tree_view.md)
 
 ## Layout & Container Components
 

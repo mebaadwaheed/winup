@@ -37,6 +37,9 @@ def TabView(*args, **kwargs): return create_widget("TabView", *args, **kwargs)
 def Textarea(*args, **kwargs): return create_widget("Textarea", *args, **kwargs)
 def Carousel(*args, **kwargs): return create_widget("Carousel", *args, **kwargs)
 def ExpandablePanel(*args, **kwargs): return create_widget("ExpandablePanel", *args, **kwargs)
+def ColorPicker(*args, **kwargs): return create_widget("ColorPicker", *args, **kwargs)
+def List(*args, **kwargs): return create_widget("List", *args, **kwargs)
+def TreeView(*args, **kwargs): return create_widget("TreeView", *args, **kwargs)
 
 # Layouts
 def Column(*args, **kwargs): return create_widget("Column", *args, **kwargs)
@@ -60,6 +63,6 @@ __all__ = [
     "Slider", "Switch", "TabView", "Textarea",
     "Row", "Column", "Stack", "Grid",
     "BarChart", "LineChart", "PieChart", "ScatterPlot",
-    "Carousel", "ExpandablePanel",
+    "Carousel", "ExpandablePanel", "ColorPicker", "List", "TreeView",
     "clear_layout", "dialogs", "VBox", "HBox", "merge_props"
 ] 

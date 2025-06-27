@@ -29,6 +29,9 @@ from .widgets.tabview import TabView as DefaultTabView
 from .widgets.scroll_view import ScrollView as DefaultScrollView
 from .widgets.carousel import Carousel as DefaultCarousel
 from .widgets.expandable_panel import ExpandablePanel as DefaultExpandablePanel
+from .widgets.color_picker import ColorPicker as DefaultColorPicker
+from .widgets.list import List as DefaultList
+from .widgets.tree_view import TreeView as DefaultTreeView
 
 # Import graph widgets
 from .widgets.graphs.bar_chart import BarChart as DefaultBarChart
@@ -58,6 +61,9 @@ _WIDGET_REGISTRY = {
     "ComboBox": DefaultComboBox,
     "Carousel": DefaultCarousel,
     "ExpandablePanel": DefaultExpandablePanel,
+    "ColorPicker": DefaultColorPicker,
+    "List": DefaultList,
+    "TreeView": DefaultTreeView,
     # Layout widgets
     "Column": DefaultColumn,
     "Row": DefaultRow,

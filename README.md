@@ -15,6 +15,10 @@
 
 # WinUp 🚀
 
+## Make sure to download the Latest Stable Release (LSR) and not the latest/LFR! Current LSR: 2.4.7
+
+`pip install winup==2.4.7`
+
 **A ridiculously Pythonic and powerful framework for building beautiful desktop applications.**
 
 WinUp is a modern UI framework for Python that wraps the power of PySide6 (Qt) in a simple, declarative, and developer-friendly API. It's designed to let you build applications faster, write cleaner code, and enjoy the development process.

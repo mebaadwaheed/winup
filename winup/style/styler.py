@@ -83,6 +83,7 @@ class Styler:
         and applies any styles that were defined before initialization.
         """
         import winup.style
+        from .theming import DEFAULT_WIDGET_STYLES
         self._app = app
         if not self.themes:
             self.themes = ThemeManager(self)
@@ -94,6 +95,8 @@ class Styler:
             first_theme = next(iter(self.themes._themes))
             self.themes.set_theme(first_theme, _force_reapply=False)
 
+        # Add default component styles and then re-apply all global styles
+        self.add_style_dict(DEFAULT_WIDGET_STYLES)
         if self._definitions:
             self.reapply_global_styles()
 
