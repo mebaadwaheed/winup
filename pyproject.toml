@@ -1,6 +1,6 @@
 [project]
 name = "winup"
-version = "2.4.7"
+version = "2.4.8"
 description = "A powerful, .exe Desktop Application Python GUI framework built on top of PySide6."
 authors = [
     { name = "ebaadwaheed", email = "ebaadalt@gmail.com" }
@@ -11,17 +11,23 @@ requires-python = ">=3.9"
 
 dependencies = [
     "PySide6 >= 6.6.0",
-    "pymysql",        # For MySQL
-    "psycopg2-binary", # For PostgreSQL
-    "pymongo",        # For MongoDB
-    "firebase-admin",  # For Firebase
     "watchdog",
     "click",
     "questionary",
     "websockets",
-    "numpy",
-    "opencv-python",
     "pyinstaller"
+]
+
+[project.optional-dependencies]
+camera = [
+    "numpy",
+    "opencv-python"
+]
+database = [
+    "pymysql",        # For MySQL
+    "psycopg2-binary", # For PostgreSQL
+    "pymongo",        # For MongoDB
+    "firebase-admin"  # For Firebase
 ]
 
 [project.urls]

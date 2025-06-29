@@ -10,11 +10,13 @@ def apply_base_theme():
         "primary-color": "#007BFF",
         "primary-text-color": "#FFFFFF",
         "background-color": "#F8F9FA",
-        "secondary-background-color": "#FFFFFF",
+        "secondary-color": "#FFFFFF",
+        "secondary-text-color": "#212529",
         "text-color": "#212529",
         "muted-text-color": "#6C757D",
         "border-color": "#DEE2E6",
         "hover-color": "#0056b3",
+        "disabled-color": "#A0A0A0",
         "error-color": "#DC3545",
     })
 
@@ -22,11 +24,13 @@ def apply_base_theme():
         "primary-color": "#007BFF",
         "primary-text-color": "#FFFFFF",
         "background-color": "#212529",
-        "secondary-background-color": "#2C3034",
+        "secondary-color": "#2C3034",
+        "secondary-text-color": "#F8F9FA",
         "text-color": "#F8F9FA",
         "muted-text-color": "#6C757D",
         "border-color": "#495057",
         "hover-color": "#0056b3",
+        "disabled-color": "#707070",
         "error-color": "#E06C75",
     })
     
@@ -98,7 +102,7 @@ def apply_base_theme():
             "border-radius": "6px",
             "padding": "8px 12px",
             "font-size": "14px",
-            "background-color": "$secondary-background-color",
+            "background-color": "$secondary-color",
             "color": "$text-color",
         },
         "QLineEdit#add-task-input:focus": {
@@ -121,7 +125,7 @@ def apply_base_theme():
             "spacing": "8px",
         },
         ".task-item, .task-item-completed": {
-            "background-color": "$secondary-background-color",
+            "background-color": "$secondary-color",
             "border-radius": "6px",
             "padding": "12px",
             "border": "1px solid $border-color",

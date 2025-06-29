@@ -140,13 +140,13 @@ The system is built on a simple concept: **theme variables**. You define your ap
 **1. Using Theme Variables**
 
 You can use theme variables in two places:
-*   In a global stylesheet using `style.styler.add_style_dict()`.
+*   In a global stylesheet using `style.add_style_dict()`.
 *   Directly in a widget's `props` dictionary.
 
 ```python
 # Define styles using variables
-style.styler.add_style_dict({
-    "QPushButton#action-button": {
+style.add_style_dict({
+    "QPushButton.action-button": {
         "background-color": "$primary-color",
         "color": "$primary-text-color",
         "font-weight": "bold",
@@ -170,18 +170,18 @@ def App():
 
 **2. Switching Themes**
 
-WinUp comes with built-in `light` and `dark` themes. You can switch between them at any time using `style.styler.themes.set_theme()`.
+WinUp comes with built-in `light` and `dark` themes. You can switch between them at any time using `style.themes.set_theme()`.
 
 ```python
 from winup import style
 
 def toggle_theme():
-    # Access the theme manager through the styler singleton
-    current_theme = style.styler.themes._active_theme_name
+    # Access the theme manager through the style module
+    current_theme = style.themes.get_active_theme_name()
     if current_theme == "light":
-        style.styler.themes.set_theme("dark")
+        style.themes.set_theme("dark")
     else:
-        style.styler.themes.set_theme("light")
+        style.themes.set_theme("light")
 
 # You can connect this function to a button click or a settings switch.
 # The entire application will automatically restyle itself.
@@ -189,26 +189,78 @@ def toggle_theme():
 
 **3. Creating Custom Themes**
 
-You can easily define your own themes by providing a dictionary of variable names to color values.
+You can easily define your own themes by providing a dictionary of variable names to color values. **Important**: Custom themes must be added after the application starts (i.e., after calling `winup.run()`), and they must define the same set of keys as the default `light` and `dark` themes to ensure compatibility with built-in widget styles.
+
+**Option 1: Add themes in your component (Recommended)**
 
 ```python
 from winup import style
 
-# Define a custom "matrix" theme
-matrix_theme = {
-    "primary-color": "#00FF41",
-    "primary-text-color": "#000000",
-    "background-color": "#0D0208",
-    "text-color": "#00FF41",
-    "border-color": "#008F11",
-    "hover-color": "#00A62A",
-}
+def App():
+    # Define a custom "matrix" theme, ensuring all default keys are present
+    matrix_theme = {
+        "primary-color": "#00FF41",
+        "primary-text-color": "#000000",
+        "secondary-color": "#1A1A1A",      # Added
+        "secondary-text-color": "#00FF41", # Added
+        "background-color": "#0D0208",
+        "text-color": "#00FF41",
+        "border-color": "#008F11",
+        "hover-color": "#00A62A",
+        "disabled-color": "#333333",       # Added
+        "error-color": "#FF4136",          # Added
+    }
 
-# Add it to the theme manager via the styler
-style.styler.themes.add_theme("matrix", matrix_theme)
+    # Add it to the theme manager
+    style.themes.add_theme("matrix", matrix_theme)
 
-# Now you can switch to it
-style.styler.themes.set_theme("matrix")
+    def toggle_theme():
+        current_theme = style.themes.get_active_theme_name()
+        if current_theme == "light":
+            style.themes.set_theme("dark")
+        elif current_theme == "dark":
+            style.themes.set_theme("matrix")
+        else:
+            style.themes.set_theme("light")
+
+    return ui.Column(children=[
+        ui.Label("Custom Theme Demo"),
+        ui.Button("Cycle Themes", on_click=toggle_theme)
+    ])
+```
+
+**Option 2: Add themes after application starts**
+
+```python
+import winup
+from winup import ui, style
+
+def App():
+    return ui.Column(children=[
+        ui.Label("Theme Demo"),
+        ui.Button("Add Matrix Theme", on_click=add_matrix_theme)
+    ])
+
+def add_matrix_theme():
+    matrix_theme = {
+        "primary-color": "#00FF41",
+        "primary-text-color": "#000000",
+        "secondary-color": "#1A1A1A",
+        "secondary-text-color": "#00FF41",
+        "background-color": "#0D0208",
+        "text-color": "#00FF41",
+        "border-color": "#008F11",
+        "hover-color": "#00A62A",
+        "disabled-color": "#333333",
+        "error-color": "#FF4136",
+    }
+    
+    # Now you can add the theme since the app is running
+    style.themes.add_theme("matrix", matrix_theme)
+    style.themes.set_theme("matrix")
+
+if __name__ == "__main__":
+    winup.run(main_component_path="your_app:App", title="Theme Demo")
 ```
 
 ## Creating Reusable Components
@@ -328,7 +380,7 @@ def App():
         )
 
         def render_list(items):
-            winup.core.hot_reload.clear_layout(list_container.layout())
+            ui.clear_layout(list_container.layout())
             for item in items:
                 # 2. Make each item draggable
                 draggable_widget = ui.Label(item["text"], props={"padding": "8px", "background-color": "white"})

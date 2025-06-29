@@ -1,3 +1,9 @@
+# Version 2.4.8 LSR **(MINOR):**
+- Fixed a bug where custom themes would crash the application if they were missing variables present in the default themes
+- Refactored dependencies into optional groups. You can now install `winup[camera]` for computer vision features or `winup[database]` for database connectors, keeping the core installation minimal
+- Updated documentation to reflect the new theme and dependency systems.
+## Contributors: @mebaadwaheed
+
 # Version 2.4.7 LSR **(MINOR):**
 - Start of Latest Stable Release, from now on for versions that have LFR (Latest Forefeit Release) will be the latest non LSR builds, you usually have to wait three days when all bugs and all features are fixed and implemented properly. Everything below this is stable.
 - Added TreeView, ColorPicker and List widgets.
