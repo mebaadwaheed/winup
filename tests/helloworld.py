@@ -1,22 +1,3 @@
-# Installation
-
-```bash
-pip install winup
-```
-*The `watchdog` library is required for the Hot Reloading feature.*
-
-```bash
-winup init
-```
-
-*This makes an app template ready for use, if LoadUp doesn't work, use PyInstaller instead.*
-
-
-# Getting Started: Hello, WinUp!
-
-Creating an application is as simple as defining a main component and running it.
-
-```python
 import sys
 import os
 
@@ -43,5 +24,4 @@ def App():
     )
 
 if __name__ == "__main__":
-    winup.run(main_component_path="hello_world:App", title="My First WinUp App")
-```
+    winup.run(main_component_path="helloworld:App", title="My First WinUp App")

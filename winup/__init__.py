@@ -8,6 +8,7 @@ from typing import Optional
 from . import ui
 from . import style
 from .state import state
+from . import tools
 from .tools import wintools, profiler
 from . import shell
 from . import tasks
@@ -105,7 +106,7 @@ def run(main_component_path: str, title="WinUp App", width=800, height=600, icon
 
 __all__ = [
     "run", "Window", "hot_reload_service", "events", 
-    "ui", "style", "state", "tools", "profiler",
+    "ui", "style", "state", "tools", "wintools", "profiler",
     "component", "memo", "clear_memo_cache",
     "shell", "tasks", "traits", "net"
 ]
