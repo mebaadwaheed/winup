@@ -1,3 +1,7 @@
+# Version 2.4.9 **(MINOR):**
+- Fixed `wintools`
+## Contributors: @mebaadwaheed
+
 # Version 2.4.8 LSR **(MINOR):**
 - Fixed a bug where custom themes would crash the application if they were missing variables present in the default themes
 - Refactored dependencies into optional groups. You can now install `winup[camera]` for computer vision features or `winup[database]` for database connectors, keeping the core installation minimal

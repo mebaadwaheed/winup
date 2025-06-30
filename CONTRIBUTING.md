@@ -1,4 +1,4 @@
-# 🤝 Contributing to WinUP
+# 🤝 Contributing to WinUp
 
 First off, thanks for taking the time to contribute to **WinUp** — your help makes this a better framework for everyone! 🚀
 
