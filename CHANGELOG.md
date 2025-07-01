@@ -1,4 +1,4 @@
-# Version 2.4.9 **(MINOR):**
+# Version 2.4.9 LSR **(MINOR):**
 - Fixed `wintools`
 ## Contributors: @mebaadwaheed
 
