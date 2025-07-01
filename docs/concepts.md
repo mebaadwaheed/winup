@@ -450,11 +450,15 @@ if __name__ == "__main__":
 Need a widget to react to changes in *multiple* state values? Use the `and_()` method to combine them. The formatter `lambda` will receive the state values as arguments in the same order.
 
 ```python
+import winup
+from winup import ui
+from winup.ui.widgets.input import Input
+
 def App():
     # Create two state objects
     first_name = winup.state.create("first_name", "John")
     last_name = winup.state.create("last_name", "Doe")
-    
+
     greeting_label = ui.Label()
 
     # Bind the label's text to BOTH state objects
@@ -464,7 +468,41 @@ def App():
         lambda fn, ln: f"Full Name: {fn} {ln}"
     )
 
-    # ... widgets to change first_name and last_name
+    # Create input widgets to allow updating of the state objects
+    first_name_input = Input()
+    first_name_input.set_text(first_name.get()) # initialize the input box with initial first name
+    last_name_input = Input()
+    last_name_input.set_text(last_name.get()) # initialize the input box with initial last name
+
+    # Functions to update the states' text
+    def update_first_name():
+        first_name.set(first_name_input.text())
+
+    def update_last_name():
+        last_name.set(last_name_input.text())
+
+    return ui.Column(
+        children=[
+            greeting_label,
+            ui.Row(
+                children=[
+                    ui.Label("First Name:"),
+                    first_name_input,
+                    ui.Button("Update first name", on_click=update_first_name),
+                ]
+            ),
+            ui.Row(
+                children=[
+                    ui.Label("Last Name:"),
+                    last_name_input,
+                    ui.Button("Update last name", on_click=update_last_name),
+                ]
+            )
+        ]
+    )
+
+if __name__ == '__main__':
+    winup.run(main_component_path="multistate_binding:App", title="Multistate Binding")
 ```
 
 **3. Two-Way Binding for Inputs**
