@@ -1,3 +1,7 @@
+# Version 2.5.0 **(MAJOR):**
+- Added Richtext Widget
+- 
+
 # Version 2.4.9 LSR **(MINOR):**
 - Fixed `wintools`
 ## Contributors: @mebaadwaheed
@@ -9,8 +13,8 @@
 ## Contributors: @mebaadwaheed
 
 # Version 2.4.7 LSR **(MINOR):**
-- Start of Latest Stable Release, from now on for versions that have LFR (Latest Forefeit Release) will be the latest non LSR builds, you usually have to wait three days when all bugs and all features are fixed and implemented properly. Everything below this is stable.
-- Added TreeView, ColorPicker and List widgets.
+- Start of Latest Stable Release, from now on for versions that have LFR (Latest Forefeit Release) will be the latest non LSR builds, you usually have to wait three days when all bugs and all features are fixed and implemented properly. Everything below this is stable
+- Added TreeView, ColorPicker and List widgets
 ## Contributors: @mebaadwaheed
 
 # Version 2.4.6 **(MINOR):**

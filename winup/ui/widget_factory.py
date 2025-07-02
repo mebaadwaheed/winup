@@ -22,6 +22,7 @@ from .widgets.progress_bar import ProgressBar as DefaultProgressBar
 from .widgets.radio_button import RadioButton as DefaultRadioButton
 from .widgets.slider import Slider as DefaultSlider
 from .widgets.textarea import Textarea as DefaultTextarea
+from .widgets.rich_text import RichText as DefaultRichText
 from .layouts import Column as DefaultColumn, Row as DefaultRow, Stack as DefaultStack, Grid as DefaultGrid
 from .widgets.combobox import ComboBox as DefaultComboBox
 from .widgets.switch import Switch as DefaultSwitch
@@ -64,6 +65,7 @@ _WIDGET_REGISTRY = {
     "ColorPicker": DefaultColorPicker,
     "List": DefaultList,
     "TreeView": DefaultTreeView,
+    "RichText": DefaultRichText,
     # Layout widgets
     "Column": DefaultColumn,
     "Row": DefaultRow,

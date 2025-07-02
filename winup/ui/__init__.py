@@ -40,6 +40,7 @@ def ExpandablePanel(*args, **kwargs): return create_widget("ExpandablePanel", *a
 def ColorPicker(*args, **kwargs): return create_widget("ColorPicker", *args, **kwargs)
 def List(*args, **kwargs): return create_widget("List", *args, **kwargs)
 def TreeView(*args, **kwargs): return create_widget("TreeView", *args, **kwargs)
+def RichText(*args, **kwargs): return create_widget("RichText", *args, **kwargs)
 
 # Layouts
 def Column(*args, **kwargs): return create_widget("Column", *args, **kwargs)
