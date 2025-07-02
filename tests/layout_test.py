@@ -79,4 +79,4 @@ def LayoutDemo():
 
 
 if __name__ == "__main__":
-    winup.run(main_component_path="layout_test:LayoutDemo", title="Advanced Layouts Demo") 
+    winup.run(main_component_path="layout_test:LayoutDemo", title="Advanced Layouts Demo", dev = True) 
