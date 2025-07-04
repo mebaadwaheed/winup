@@ -10,6 +10,12 @@ from winup import ui, state
 def ListExample():
     # State to hold the selected item
     selected_item = state.create("list_selection", "None")
+    selected_label = ui.Label(text=selected_item.get())
+    selected_item.bind_to(
+        selected_label,
+        'text',
+        lambda item: item
+    )
 
     return ui.Row(props={"spacing": 20}, children=[
         # An ordered, single-selection list
@@ -21,7 +27,7 @@ def ListExample():
                 on_select=lambda item: selected_item.set(item),
                 width=200
             ),
-            ui.Label(text=selected_item.get())
+            selected_label,
         ]),
 
         # An unordered, multi-selection list
