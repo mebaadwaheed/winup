@@ -5,7 +5,8 @@ An `ExpandablePanel` is a widget that can be collapsed to hide its content, show
 ## Usage
 
 ```python
-from winup import ui, winup
+import winup
+from winup import ui
 
 @winup.component
 def ExpandablePanelExample():
@@ -20,7 +21,7 @@ def ExpandablePanelExample():
     return ui.Column(children=[
         ui.ExpandablePanel(
             title="Click to Expand Me",
-            children=panel_content
+            children=[panel_content]
         ),
         ui.ExpandablePanel(
             title="This One Starts Expanded",
