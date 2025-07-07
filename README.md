@@ -26,6 +26,8 @@ WinUp is a modern UI framework for Python that wraps the power of PySide6 (Qt) i
 ### ✨ Now with Web Support!
 WinUp now also supports building fully interactive, stateful web applications using the same Python-centric, component-based approach. The web module uses FastAPI and WebSockets under the hood to bring the simplicity of WinUp to the browser.
 
+[Web Documentation](docs/web/README.md)
+
 > **Disclaimer:** Web support is an optional feature. To use it, you must install the web dependencies:
 > ```bash
 > pip install "winup[web]"
