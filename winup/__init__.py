@@ -15,6 +15,13 @@ from . import tasks
 from . import traits
 from . import net
 
+try:
+    from . import web
+except ImportError:
+    # Web dependencies are not installed.
+    # Users can install them with `pip install winup[web]`
+    web = None
+
 import sys
 import importlib
 from PySide6.QtCore import QTimer
@@ -108,5 +115,5 @@ __all__ = [
     "run", "Window", "hot_reload_service", "events", 
     "ui", "style", "state", "tools", "wintools", "profiler",
     "component", "memo", "clear_memo_cache",
-    "shell", "tasks", "traits", "net"
+    "shell", "tasks", "traits", "net", "web"
 ]

@@ -1,6 +1,8 @@
-# Version 2.5.0 **(MAJOR):**
+# Version 2.5.0 LFR **(MAJOR):**
 - Added Richtext Widget
-- 
+- Fixed Switch Widget
+- Added Web Support with `fastapi` and `uvicorn`
+## Contributors: @mebaadwaheed
 
 # Version 2.4.9 LSR **(MINOR):**
 - Fixed `wintools`

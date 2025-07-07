@@ -54,10 +54,12 @@ class _WinUpApp:
     _instance = None
 
     def __init__(self):
-        if QApplication.instance():
-            self.app = QApplication.instance()
-        else:
-            self.app = QApplication(sys.argv)
+        app = QApplication.instance()
+        if not isinstance(app, QApplication):
+             # If no QApplication, create one. This also handles the None case.
+            app = QApplication(sys.argv)
+        
+        self.app: QApplication = app
             
         self.windows = [] # Keep track of all open windows
         self._main_window: Optional[Window] = None
