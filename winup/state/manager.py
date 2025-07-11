@@ -1,6 +1,6 @@
 from PySide6.QtWidgets import QWidget, QLineEdit, QCheckBox
-from typing import TypeVar, Generic
-from winup.style.styler import styler
+from typing import TypeVar, Generic, Any, Callable, cast, Dict
+import asyncio
 
 T = TypeVar('T')
 
@@ -10,21 +10,29 @@ class State(Generic[T]):
         self._key = key
         self._manager = manager
         # Set the initial value in the manager
-        self._manager.set(self._key, initial_value)
+        if key not in self._manager._state:
+            self._manager._state[key] = initial_value
 
     def get(self) -> T:
         """Gets the current value of the state."""
-        return self._manager.get(self._key)
+        return cast(T, self._manager.get(self._key))
 
     def set(self, value: T):
-        """Sets a new value for the state."""
-        self._manager.set(self._key, value)
+        """Sets a new value for the state. (For Desktop)"""
+        # This is a synchronous wrapper for desktop applications.
+        # It calls the async set method but doesn't wait for it.
+        asyncio.run(self._manager.set(self._key, value, sync_only=True))
 
-    def subscribe(self, callback: callable):
+
+    async def set_async(self, value: T):
+        """Sets a new value for the state and broadcasts to web clients if applicable."""
+        await self._manager.set(self._key, value)
+
+    def subscribe(self, callback: Callable):
         """Subscribes a callback to changes in this state."""
         self._manager.subscribe(self._key, callback)
 
-    def bind_to(self, widget: QWidget, property_name: str, formatter: callable):
+    def bind_to(self, widget: QWidget, property_name: str, formatter: Callable):
         """Binds this state to a widget's property using a formatter."""
         # Use a MultiStateBinding with a single state for consistency
         MultiStateBinding(self._manager, self).bind_to(widget, property_name, formatter)
@@ -40,7 +48,7 @@ class MultiStateBinding:
         self._states = states
         self._keys = [s._key for s in states]
 
-    def bind_to(self, widget: QWidget, property_name: str, formatter: callable):
+    def bind_to(self, widget: QWidget, property_name: str, formatter: Callable):
         """
         Binds the collected states to a widget's property using a formatter.
         """
@@ -59,6 +67,33 @@ class StateManager:
         self._complex_bindings = {}
         # Holds created State objects to ensure singletons per key
         self._state_objects = {}
+        # For web context
+        self._is_web_context = False
+        self._web_connections: list[Any] = []
+
+
+    def set_web_context(self, is_web: bool):
+        """Sets the state manager to operate in a web context."""
+        self._is_web_context = is_web
+
+    def add_web_connection(self, websocket: Any):
+        """Adds a new client WebSocket connection."""
+        self._web_connections.append(websocket)
+
+    def remove_web_connection(self, websocket: Any):
+        """Removes a client WebSocket connection."""
+        self._web_connections.remove(websocket)
+
+    async def broadcast(self, key: str, value: Any):
+        """Sends a state update to all connected web clients."""
+        if not self._is_web_context:
+            return
+        message = {"type": "state_update", "key": key, "value": value}
+        # Use asyncio.gather to send all messages concurrently
+        await asyncio.gather(
+            *[conn.send_json(message) for conn in self._web_connections]
+        )
+
 
     def create(self, key: str, initial_value=None) -> State:
         """
@@ -67,25 +102,37 @@ class StateManager:
         """
         if key not in self._state_objects:
             self._state_objects[key] = State(key, self, initial_value)
+        else:
+            # If state already exists, make sure its value is not reset
+            pass
         return self._state_objects[key]
 
-    def set(self, key: str, value):
+    async def set(self, key: str, value, sync_only=False):
         """
         Sets a value in the state and updates all bound widgets and subscriptions.
+        If in web context, it also broadcasts the change to clients.
         """
         if self._state.get(key) == value:
             return # No change, no update needed
 
         self._state[key] = value
+
+        # --- Synchronous updates for Desktop ---
         self._update_bindings(key)
         self._update_complex_bindings(key)
         self._execute_subscriptions(key)
+
+        # --- Asynchronous broadcast for Web ---
+        if self._is_web_context and not sync_only:
+            await self.broadcast(key, value)
+            
+
 
     def get(self, key: str, default=None):
         """Gets a value from the state."""
         return self._state.get(key, default)
 
-    def subscribe(self, key: str, callback: callable):
+    def subscribe(self, key: str, callback: Callable):
         """
         Subscribes a callback function to a state key. The callback will be
         executed whenever the state value changes.
@@ -98,7 +145,7 @@ class StateManager:
         # Immediately call with current value
         callback(self.get(key))
 
-    def bind_to(self, state_keys: list[str], widget: QWidget, property_name: str, formatter: callable):
+    def bind_to(self, state_keys: list[str], widget: QWidget, property_name: str, formatter: Callable):
         """
         Binds one or more state keys to a widget's property using a formatter function.
 
@@ -193,6 +240,7 @@ class StateManager:
         """Helper to set a property on a widget, trying setter method first."""
         # Special handling for the 'style' property
         if property_name == 'style' and isinstance(value, dict):
+            from winup.style.styler import styler
             styler.apply_props(widget, value)
             return
 
@@ -256,3 +304,4 @@ class StateManager:
             )
         except Exception as e:
             print(f"Error applying binding: {e}")
+

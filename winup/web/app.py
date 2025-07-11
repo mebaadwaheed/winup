@@ -12,7 +12,7 @@ from uvicorn.config import LOGGING_CONFIG
 from ..core.hot_reload import _import_from_string
 from .script_manager import script_manager
 from .router import Router
-from .state import state
+from ..state import state
 from .event_manager import event_manager
 from . import profiler
 
@@ -35,21 +35,34 @@ def _configure_app_routes(config: dict):
     title = config.get("title", "My App")
     favicon = config.get("favicon")
     app_shell_path = config.get("app_shell_path")
+    mode = config.get("mode", "router") # Default to router for older configs
 
-    # --- Get the router object ---
-    router: Router = _import_from_string(config["path"])
+    main_component_func = None
+    router = None
     
+    # --- Get the router object or create one ---
+    if mode == "router":
+        router = _import_from_string(config["path"])
+    else: # mode == "main_component"
+        main_component_func = _import_from_string(config["path"])
+        router = Router({"/": main_component_func})
+
     @app.get("/{path:path}", response_class=HTMLResponse)
     async def serve_page(request: Request, path: str):
-        route_path = f"/{path or ''}"
-        if route_path == "/" and not router.routes.get("/"):
-             # Handle root path when only / is not defined
-             route_path = next(iter(router.routes))
         
-        target_component_func = router.routes.get(route_path)
+        if mode == 'main_component':
+            target_component_func = main_component_func
+        else: # mode == 'router'
+            route_path = f"/{path or ''}"
+            if route_path == "/" and not router.routes.get("/"):
+                # Handle root path when only / is not defined
+                route_path = next(iter(router.routes))
+            
+            target_component_func = router.routes.get(route_path)
 
         if not target_component_func:
-            return templates.TemplateResponse("404.html", {"request": request, "title": "Not Found", "path": route_path}, status_code=404)
+            return templates.TemplateResponse("404.html", {"request": request, "title": "Not Found", "path": path}, status_code=404)
+        
         if isinstance(target_component_func, dict) and 'redirect' in target_component_func:
             return RedirectResponse(url=target_component_func['redirect'])
         
@@ -99,7 +112,7 @@ app.mount("/_winup/static", StaticFiles(directory=static_dir_path), name="static
 async def websocket_endpoint(websocket: WebSocket):
     """The main WebSocket endpoint for state synchronization."""
     await websocket.accept()
-    state.add_connection(websocket)
+    state.add_web_connection(websocket)
     try:
         while True:
             data = await websocket.receive_json()
@@ -121,7 +134,7 @@ async def websocket_endpoint(websocket: WebSocket):
         # Client disconnected, no need to log this as an error
         pass
     finally:
-        state.remove_connection(websocket)
+        state.remove_web_connection(websocket)
 
 def web_run(
     main_component_path: Optional[str] = None,
@@ -147,6 +160,9 @@ def web_run(
     else:
         run_config["mode"] = "main_component"
         run_config["path"] = main_component_path
+
+    # --- Set web context for state manager ---
+    state.set_web_context(True)
 
     # --- Run Server ---
     log_config = LOGGING_CONFIG.copy() # Configure logging for branding

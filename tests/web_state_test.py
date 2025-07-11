@@ -5,12 +5,12 @@ project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 if project_root not in sys.path:
     sys.path.insert(0, project_root)
 
-from winup import web
+from winup import web, state
 
 # --- 1. Create State Variables ---
 # This is the global state for your application
-counter = web.state.create("counter", 0)
-username = web.state.create("username", "Guest")
+counter = state.create("counter", 0)
+username = state.create("username", "Guest")
 
 # --- 2. Define Event Handlers at the top level ---
 async def increment(event):
@@ -19,12 +19,11 @@ async def increment(event):
     This will automatically broadcast the change to all clients.
     """
     current_value = counter.get()
-    await counter.set(current_value + 1)
+    await counter.set_async(current_value + 1)
 
 # --- 3. Define Components ---
 @web.component
 def App():
-    
     return web.ui.Column(
         gap="1rem",
         style={'max_width': '600px', 'margin': '2rem auto'},

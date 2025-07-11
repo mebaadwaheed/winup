@@ -10,14 +10,14 @@ if project_root not in sys.path:
     sys.path.insert(0, project_root)
 
 try:
-    from winup import web
+    from winup import web, state
 except ImportError:
     print("Please install web dependencies first: pip install .[web]")
     sys.exit(1)
 
 # --- 1. State Management ---
-task_status = web.state.create("task_status", "Idle")
-task_result = web.state.create("task_result", "N/A")
+task_status = state.create("task_status", "Idle")
+task_result = state.create("task_result", "N/A")
 memo_render_count = 0  # Use a global to track actual renders
 
 # --- 2. Profiler & Memoization Demo ---
@@ -41,16 +41,16 @@ def MemoizedCard(title: str):
 # --- 3. Task Runner Demo ---
 # --- Callbacks ---
 async def on_task_start():
-    await task_status.set("Running...")
-    await task_result.set("...")
+    await task_status.set_async("Running...")
+    await task_result.set_async("...")
 
 async def on_task_finish(result):
-    await task_status.set("Success!")
-    await task_result.set(str(result))
+    await task_status.set_async("Success!")
+    await task_result.set_async(str(result))
 
 async def on_task_error(error):
-    await task_status.set("Error!")
-    await task_result.set(str(error))
+    await task_status.set_async("Error!")
+    await task_result.set_async(str(error))
 
 # --- Tasks ---
 @web.tasks.run(on_start=on_task_start, on_finish=on_task_finish, on_error=on_task_error)

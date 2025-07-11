@@ -139,6 +139,8 @@ def Card(text: str):
     )
 """
 
+
+
 WINUP_CONFIG_CONTENT = {
     "project_name": "{project_name}",
     "version": "0.1.0",
@@ -179,6 +181,7 @@ def init():
 
         # Create directories
         src_path = project_path / "src" / "app" / "components"
+        web_path = project_path / "web" / "src" / "app" / "components"
         assets_path = project_path / "assets"
         src_path.mkdir(parents=True, exist_ok=True)
         assets_path.mkdir(exist_ok=True)

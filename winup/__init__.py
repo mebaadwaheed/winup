@@ -32,14 +32,6 @@ def run(main_component_path: str, title="WinUp App", width=800, height=600, icon
     """
     The main entry point for a WinUp application.
     ... (docstring) ...
-    Args:
-        ...
-        dev (bool): If True, enables development features like hot reloading.
-        # --- ADD THESE ARGS TO DOCSTRING ---
-        menu_bar (shell.MenuBar): A MenuBar object for the main window.
-        tool_bar (shell.ToolBar): A ToolBar object for the main window.
-        status_bar (shell.StatusBar): A StatusBar object for the main window.
-        tray_icon (shell.SystemTrayIcon): An icon for the system tray.
     """
     # Initialize the style manager immediately, before any widgets are created.
     style.init_app(_winup_app.app)
@@ -47,7 +39,6 @@ def run(main_component_path: str, title="WinUp App", width=800, height=600, icon
     main_component = _import_from_string(main_component_path)
     main_widget = main_component()
     
-    # --- ADD THIS ---
     shell_kwargs = {
         "menu_bar": menu_bar,
         "tool_bar": tool_bar,
@@ -60,8 +51,6 @@ def run(main_component_path: str, title="WinUp App", width=800, height=600, icon
     # Initialize all modules that require a window instance
     wintools.init_app(main_window)
     
-    # --- NEW HOT RELOAD LOGIC ---
-    # Enable hot reloading if in dev mode
     if dev:
         print("Development mode enabled. Starting hot reloader...")
         
@@ -73,22 +62,18 @@ def run(main_component_path: str, title="WinUp App", width=800, height=600, icon
             try:
                 print("[Hot Reload] Reloading UI on main thread...")
                 
-                # Dynamically get the LATEST version of the component
                 fresh_main_component = _import_from_string(main_component_path)
                 
                 print(f"[Hot Reload] Replacing old component: {main_component}")
                 print(f"[Hot Reload] With new component: {fresh_main_component}")
 
-                # Destroy the old widget to trigger unmount hooks
                 old_widget = main_window.centralWidget()
                 if old_widget:
                     old_widget.deleteLater()
 
-                # Create the new UI
                 new_widget = fresh_main_component()
                 main_window.setCentralWidget(new_widget)
                 
-                # Update the reference for the next reload
                 main_component = fresh_main_component
                 
                 print("[Hot Reload] UI Reloaded successfully.")

@@ -9,7 +9,7 @@ if project_root not in sys.path:
     sys.path.insert(0, project_root)
 
 try:
-    from winup import web
+    from winup import web, state
     from winup.web.ui.component import Component # For type hinting
 except ImportError:
     print("Please install web dependencies first: pip install .[web]")
@@ -19,20 +19,20 @@ except ImportError:
 def get_element(element_id: str) -> Any: pass
 
 # --- 2. State Management ---
-counter = web.state.create("counter", 0)
-text_input = web.state.create("text_input", "Hello WinUp!")
-is_checked = web.state.create("is_checked", False)
-checked_status_text = web.state.create("checked_status_text", "The checkbox is currently: Unchecked")
+counter = state.create("counter", 0)
+text_input = state.create("text_input", "Hello WinUp!")
+is_checked = state.create("is_checked", False)
+checked_status_text = state.create("checked_status_text", "The checkbox is currently: Unchecked")
 
 # --- 3. Event Handlers ---
 async def increment(event):
-    await counter.set(counter.get() + 1)
+    await counter.set_async(counter.get() + 1)
 
 async def toggle_checkbox(event):
     new_value = not is_checked.get()
-    await is_checked.set(new_value)
+    await is_checked.set_async(new_value)
     status = "Checked" if new_value else "Unchecked"
-    await checked_status_text.set(f"The checkbox is currently: {status}")
+    await checked_status_text.set_async(f"The checkbox is currently: {status}")
 
 # --- 4. Lifecycle Hooks ---
 def on_page_mount(el: Component):

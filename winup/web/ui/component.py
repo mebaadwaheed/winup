@@ -3,6 +3,7 @@ import uuid
 from ..script_manager import script_manager
 from ..py_to_js import transpile_hook
 from ..event_manager import event_manager
+from ...state import state
 
 class Component:
     def __init__(self, children: Optional[List['Component']] = None, props: Optional[Dict[str, Any]] = None):
@@ -15,7 +16,6 @@ class Component:
         if bind_text_key:
             self.props['data-bind-text'] = bind_text_key
             # Set the initial text from the state for the first render
-            from winup.web.state import state
             if 'text' not in self.props:
                 self.props['text'] = state.get(bind_text_key)
 
@@ -23,7 +23,6 @@ class Component:
         bind_value_key = self.props.pop('bind_value', None)
         if bind_value_key:
             self.props['data-bind-value'] = bind_value_key
-            from winup.web.state import state
             # Set the initial value from the state
             self.props['value'] = state.get(bind_value_key)
 
@@ -31,7 +30,6 @@ class Component:
         bind_checked_key = self.props.pop('bind_checked', None)
         if bind_checked_key:
             self.props['data-bind-checked'] = bind_checked_key
-            from winup.web.state import state
             # Set the initial checked status from the state
             self.props['checked'] = state.get(bind_checked_key)
 
@@ -41,6 +39,7 @@ class Component:
         else:
             self.component_id = f"winup-c-{uuid.uuid4().hex}"
             self.props['id'] = self.component_id
+
 
         # --- Handle lifecycle hooks ---
         self._process_lifecycle_hook('on_mount')
@@ -101,4 +100,4 @@ class Component:
         raise NotImplementedError("Each component must implement a render method.")
 
     def __str__(self):
-        return self.render() 
+        return self.render()
