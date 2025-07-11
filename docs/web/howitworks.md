@@ -12,7 +12,7 @@ WinUp's web framework is designed to let you build interactive, stateful web use
 
 4.  **State Management & Reactivity**:
     - The application state (e.g., a counter, user input, a list of items) lives on the server.
-    - You use `web.state.create()` to create reactive state variables.
+    - You use `state.create()` to create reactive state variables.
     - When you bind a component's property (like a `Label`'s text) to a state variable, WinUp establishes a link.
     - When the state variable is updated on the server (e.g., through an `@web.tasks.run` background task or an `on_click` event), the server automatically sends the new value to the browser over a persistent WebSocket connection.
 
