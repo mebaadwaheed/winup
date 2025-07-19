@@ -1,3 +1,8 @@
+# Version 2.5.1 LSR **(MINOR):**
+- Stabilised web support
+- Hopefully fixed image scaling
+## Contributors: @mebaadwaheed
+
 # Version 2.5.0 LFR **(MAJOR):**
 - Added Richtext Widget
 - Fixed Switch Widget
