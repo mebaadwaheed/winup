@@ -21,7 +21,7 @@ class State(Generic[T]):
         """Sets a new value for the state. (For Desktop)"""
         # This is a synchronous wrapper for desktop applications.
         # It calls the async set method but doesn't wait for it.
-        asyncio.run(self._manager.set(self._key, value, sync_only=True))
+        self._manager.set_sync(self._key, value)
 
 
     async def set_async(self, value: T):
@@ -106,6 +106,20 @@ class StateManager:
             # If state already exists, make sure its value is not reset
             pass
         return self._state_objects[key]
+
+    def set_sync(self, key: str, value):
+        """
+        Synchronously sets a value and updates desktop components.
+        """
+        if self._state.get(key) == value:
+            return  # No change, no update needed
+
+        self._state[key] = value
+
+        # --- Synchronous updates for Desktop ---
+        self._update_bindings(key)
+        self._update_complex_bindings(key)
+        self._execute_subscriptions(key)
 
     async def set(self, key: str, value, sync_only=False):
         """

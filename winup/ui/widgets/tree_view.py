@@ -36,6 +36,7 @@ class TreeView(Component):
 
     def render(self):
         widget = QTreeWidget()
+        self.widget = widget
         widget.setHeaderHidden(True)
         self.populate_tree(widget, self.data)
 
@@ -53,7 +54,6 @@ class TreeView(Component):
             # Ensure the selected node is visible
             widget.scrollToItem(self.node_map[self.selected_node])
 
-        self.widget = widget
         return widget
 
     def populate_tree(self, parent_widget, data, parent_key=''):
