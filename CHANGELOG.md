@@ -1,3 +1,8 @@
+# Version 2.5.2 LSR **(MINOR):**
+- Fixed TreeView
+- Fixed File Navigation System
+## Contributors: @mebaadwaheed
+
 # Version 2.5.1 LSR **(MINOR):**
 - Stabilised web support
 - Hopefully fixed image scaling
