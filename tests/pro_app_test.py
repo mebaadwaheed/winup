@@ -1,3 +1,9 @@
+import os
+import sys
+
+# Add the project root to the path
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
 import winup
 from winup import ui, shell, tasks, profiler
 import time

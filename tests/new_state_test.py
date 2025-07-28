@@ -65,7 +65,7 @@ def NewStateApp():
 
 if __name__ == "__main__":
     winup.run(
-        main_component=NewStateApp,
+        main_component_path="new_state_test:NewStateApp",
         title="New State Management Demo",
         width=600,
         height=300

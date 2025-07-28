@@ -30,7 +30,7 @@ WinUp now also supports building fully interactive, stateful web applications us
 
 > **Disclaimer:** Web support is an optional feature. To use it, you must install the web dependencies:
 > ```bash
-> pip install "winup[web]"
+> pip install winup[web]
 > ```
 
 [Contributing](CONTRIBUTING.md)
