@@ -1,3 +1,7 @@
+# Version 2.5.5 LFR **(MINOR):**
+- Added more Tailwind Classes and fixed bug
+## Contributors: @mebaadwaheed
+
 # Version 2.5.4 LFR **(MINOR):**
 - Added Tailwind Support (Basic)
 ## Contributors: @mebaadwaheed
