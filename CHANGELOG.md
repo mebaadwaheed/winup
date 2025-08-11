@@ -1,3 +1,7 @@
+# Version 2.5.4 LFR **(MINOR):**
+- Added Tailwind Support (Basic)
+## Contributors: @mebaadwaheed
+
 # Version 2.5.3 LSR **(MINOR):**
 - Fixed `templates` and `static` folder not appearing when `winup[web]` is installed
 ## Contributors: @mebaadwaheed, @nanonator102

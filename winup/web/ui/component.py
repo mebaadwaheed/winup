@@ -4,11 +4,28 @@ from ..script_manager import script_manager
 from ..py_to_js import transpile_hook
 from ..event_manager import event_manager
 from ...state import state
+from ...style.tailwind import transpile_tailwind
 
 class Component:
     def __init__(self, children: Optional[List['Component']] = None, props: Optional[Dict[str, Any]] = None):
         self.children = children or []
         self.props = props or {}
+
+        # --- Handle Tailwind styling ---
+        tailwind_string = self.props.pop('tailwind', None)
+        if tailwind_string:
+            # Transpile tailwind classes to a style dictionary
+            tailwind_styles = transpile_tailwind(tailwind_string, platform='web')
+            
+            # Convert the style dictionary to a CSS string
+            tailwind_css = "; ".join([f"{key}: {value}" for key, value in tailwind_styles.items()])
+            
+            # Merge with existing styles
+            existing_style = self.props.get('style', '')
+            if existing_style and not existing_style.strip().endswith(';'):
+                existing_style += ';'
+            
+            self.props['style'] = f"{existing_style} {tailwind_css}".strip()
 
         # --- Handle State Binding ---
         # `bind_text` for one-way binding to textContent

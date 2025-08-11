@@ -4,6 +4,7 @@ from PySide6.QtCore import Qt
 from PySide6.QtGui import QCursor, QFont
 # Import the class, not the module, to avoid the cycle
 from .theming import ThemeManager
+from .tailwind import transpile_tailwind
 from winup.ui.layout_managers import VBox, HBox
 
 # --- Style Constants ---
@@ -197,7 +198,15 @@ class Styler:
         if not self._app and QApplication.instance():
             self.init_app(QApplication.instance())
 
+        tailwind_props = {}
+        if 'tailwind' in props:
+            tailwind_string = props.pop('tailwind')
+            # Assuming 'desktop' for now. This will need to be dynamic later.
+            tailwind_props = transpile_tailwind(tailwind_string, platform='desktop')
+
         themed_props = self.themes.substitute_variables(props) if props else {}
+        # Merge Tailwind props with other props
+        themed_props = {**tailwind_props, **themed_props}
 
         # Handle special properties first
         if "class" in themed_props:

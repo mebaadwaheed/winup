@@ -110,12 +110,17 @@ def create_widget(name: str, *args, **kwargs):
     if not widget_class:
         raise ValueError(f"Widget type '{name}' not found in registry. Have you registered it?")
     
-    # Intercept lifecycle hooks before they are passed to the widget's constructor.
+    # Intercept lifecycle hooks and props before they are passed to the widget's constructor.
     on_mount_handler = kwargs.pop("on_mount", None)
     on_unmount_handler = kwargs.pop("on_unmount", None)
+    props = kwargs.pop("props", {})
+
+    # If tailwind is passed at the top level, merge it into props
+    if 'tailwind' in kwargs:
+        props['tailwind'] = kwargs.pop('tailwind')
 
     # Create the widget. The widget's __init__ is now responsible for handling all props.
-    widget_instance = widget_class(*args, **kwargs)
+    widget_instance = widget_class(*args, props=props, **kwargs)
     
     # Attach the hooks to the instance itself for the component decorator to find.
     if on_mount_handler:

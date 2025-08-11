@@ -116,6 +116,7 @@ Dive deeper into the features of WinUp:
 - [**Performance Profiler**](docs/profiler.md)
 - [**Memoization**](docs/memoization.md)
 - [**Async Task Runner**](docs/tasks.md)
+- [**Tailwind Support**](docs/tailwindstyling.md)
 
 ## UI Components
 - [**Full Component Library**](docs/components/README.md)
