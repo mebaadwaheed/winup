@@ -34,17 +34,26 @@ web_ui.Button("Click Me", props={'tailwind': 'bg-blue-500 text-white p-4'})
 
 Here is a list of all available Tailwind classes and their corresponding output for both web and desktop platforms.
 
-| Tailwind Class | Desktop (QSS) | Web (CSS) |
-| --- | --- | --- |
-| `bg-blue-500` | `background-color: #3B82F6;` | `background-color: #3B82F6;` |
-| `text-black` | `color: #000000;` | `color: #000000;` |
-| `text-white` | `color: #FFFFFF;` | `color: #FFFFFF;` |
-| `p-4` | `padding: 16px;` | `padding: 1rem;` |
-| `p-2` | `padding: 8px;` | `padding: 0.5rem;` |
-| `p-1` | `padding: 4px;` | `padding: 0.25rem;` |
-| `p-0` | `padding: 0px;` | `padding: 0rem;` |
-| `m-4` | `margin: 16px;` | `margin: 1rem;` |
-| `m-2` | `margin: 8px;` | `margin: 0.5rem;` |
-| `m-1` | `margin: 4px;` | `margin: 0.25rem;` |
-| `m-0` | `margin: 0px;` | `margin: 0rem;` |
-| `w-1/2` | `width: 50%;` | `width: 50%;` |
+| Tailwind Class | Desktop (QSS)                              | Web (CSS)                                  |
+| -------------- | ------------------------------------------ | ------------------------------------------ |
+| bg-blue-500    | background-color: #3B82F6;               | background-color: #3B82F6;               |
+| text-black     | color: #000000;                          | color: #000000;                          |
+| text-white     | color: #FFFFFF;                          | color: #FFFFFF;                          |
+| p-4            | padding: 16px;                             | padding: 1rem;                             |
+| p-2            | padding: 8px;                              | padding: 0.5rem;                           |
+| p-1            | padding: 4px;                              | padding: 0.25rem;                          |
+| p-0            | padding: 0px;                              | padding: 0rem;                             |
+| m-4            | margin: 16px;                              | margin: 1rem;                              |
+| m-2            | margin: 8px;                               | margin: 0.5rem;                            |
+| m-1            | margin: 4px;                               | margin: 0.25rem;                           |
+| m-0            | margin: 0px;                               | margin: 0rem;                              |
+| w-1/2          | width: 50%;                                | width: 50%;                                |
+| text-xl        | font-size: 1.25rem; line-height: 1.75rem;  | font-size: 1.25rem; line-height: 1.75rem;  |
+| text-lg        | font-size: 1.125rem; line-height: 1.75rem; | font-size: 1.125rem; line-height: 1.75rem; |
+| text-sm        | font-size: 0.875rem; line-height: 1.25rem; | font-size: 0.875rem; line-height: 1.25rem; |
+| text-base      | font-size: 1rem; line-height: 1.5rem;      | font-size: 1rem; line-height: 1.5rem;      |
+| text-xs        | font-size: 0.75rem; line-height: 1rem;     | font-size: 0.75rem; line-height: 1rem;     |
+| font-bold      | font-weight: bold;                         | font-weight: bold;                         |
+| font-medium    | font-weight: 500;                          | font-weight: 500;                          |
+| font-light     | font-weight: 300;                          | font-weight: 300;                          |
+

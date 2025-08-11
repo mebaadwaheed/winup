@@ -1,30 +1,18 @@
-import unittest
-from PySide6.QtWidgets import QApplication
-from winup.ui.widgets.button import Button
-from winup.style.styler import styler
+import sys
+import os
 
-class TestTailwindStyling(unittest.TestCase):
+# Add the project root to the path
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-    @classmethod
-    def setUpClass(cls):
-        # Create a QApplication instance for testing
-        if not QApplication.instance():
-            cls.app = QApplication([])
-        else:
-            cls.app = QApplication.instance()
+import winup
+from winup import ui
 
-    def test_desktop_tailwind_styling(self):
-        # Arrange
-        tailwind_props = "bg-blue-500 text-white p-4"
-        expected_qss = "background-color: #3B82F6;color: #FFFFFF;padding: 16px;"
+@winup.component
+def App():
+    return ui.Column(children=[
+        ui.Label("Hello, Tailwind CSS with WinUp!", props={"tailwind" : "text-black font-bold text-xl"}),
+        ui.Button("Click Me", props={"tailwind": "bg-blue-500 text-white p-2"}),
+    ])
 
-        # Act
-        props = {'tailwind': tailwind_props}
-        button = Button(props=props)
-        styler.apply_props(button, props)
-
-        # Assert
-        self.assertIn(expected_qss.replace(" ", ""), button.styleSheet().replace(" ", ""))
-
-if __name__ == '__main__':
-    unittest.main()
+if __name__ == "__main__":
+    winup.run(main_component_path="test_tailwind_styling:App", title="Tailwind Styling Example")

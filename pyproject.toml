@@ -1,6 +1,6 @@
 [project]
 name = "winup"
-version = "2.5.3"
+version = "2.5.4"
 description = "A powerful, .exe Desktop and Web Application Python GUI framework built on top of PySide6."
 authors = [
     { name = "ebaadwaheed", email = "ebaadalt@gmail.com" }
