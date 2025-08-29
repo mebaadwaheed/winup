@@ -15,9 +15,9 @@
 
 # WinUp 🚀
 
-## Make sure to download the Latest Stable Release (LSR) and not the latest/LFR! Current LSR: 2.5.3
+## Make sure to download the Latest Stable Release (LSR) and not the latest/LFR! Current LSR: 2.5.6
 
-`pip install winup==2.5.3`
+`pip install winup==2.5.6`
 
 **A ridiculously Pythonic and powerful framework for building beautiful desktop applications.**
 

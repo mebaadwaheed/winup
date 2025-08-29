@@ -6,7 +6,7 @@ from ...core.network import ImageLoader
 class Image(QLabel):
     """A widget to display images from files or URLs."""
 
-    def __init__(self, src: str, scale_to_width: int = None, scale_to_height: int = None, keep_aspect_ratio: bool = True, parent=None):
+    def __init__(self, src: str, scale_to_width: int = None, scale_to_height: int = None, keep_aspect_ratio: bool = True, props: dict = None, parent=None):
         super().__init__(parent)
         self.src = src
         self.scale_to_width = scale_to_width

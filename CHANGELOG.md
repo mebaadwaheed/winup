@@ -1,3 +1,8 @@
+# Version 2.5.6 LSR **(MINOR):**
+- Added `set_title` method to `ExpandablePanel`
+- Fixed `Image` widget not loading images from local files
+## Contributors: @mebaadwaheed, @cdamundsen
+
 # Version 2.5.5 LFR **(MINOR):**
 - Added more Tailwind Classes and fixed bug
 ## Contributors: @mebaadwaheed

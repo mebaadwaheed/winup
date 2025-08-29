@@ -29,6 +29,7 @@ class ExpandablePanel(QWidget):
         content_props: dict = None,
         expand_icon: str = "▼",
         collapse_icon: str = "►",
+        props: dict = None,
     ):
         super().__init__(parent)
         self.is_expanded = expanded
@@ -150,4 +151,10 @@ class ExpandablePanel(QWidget):
 
     def collapse(self):
         """Collapses the panel."""
-        self.toggle_button.setChecked(False) 
+        self.toggle_button.setChecked(False)
+
+    def set_title(self, new_title: str):
+        """Updates the panel's title text during runtime."""
+        self._title = new_title
+        icon = self._expand_icon if self.is_expanded else self._collapse_icon
+        self.toggle_button.setText(f"{self._title} {icon}")
