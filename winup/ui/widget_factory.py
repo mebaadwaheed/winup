@@ -113,7 +113,11 @@ def create_widget(name: str, *args, **kwargs):
     # Intercept lifecycle hooks and props before they are passed to the widget's constructor.
     on_mount_handler = kwargs.pop("on_mount", None)
     on_unmount_handler = kwargs.pop("on_unmount", None)
-    props = kwargs.pop("props", {})
+    props = kwargs.pop("props", None)
+    
+    # Ensure props is never None to prevent NoneType errors
+    if props is None:
+        props = {}
 
     # If tailwind is passed at the top level, merge it into props
     if 'tailwind' in kwargs:

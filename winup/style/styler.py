@@ -198,6 +198,10 @@ class Styler:
         if not self._app and QApplication.instance():
             self.init_app(QApplication.instance())
 
+        # Handle None props gracefully
+        if props is None:
+            props = {}
+
         tailwind_props = {}
         if 'tailwind' in props:
             tailwind_string = props.pop('tailwind')

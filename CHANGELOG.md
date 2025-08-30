@@ -1,3 +1,9 @@
+# Version 2.5.7 LSR **(MINOR):**
+- Fixed `None` on different properties
+- Fixed Props Init for most widgets
+- Added two new testcases
+## Contributors: @mebaadwaheed, @cdamundsen
+
 # Version 2.5.6 LSR **(MINOR):**
 - Added `set_title` method to `ExpandablePanel`
 - Fixed `Image` widget not loading images from local files
