@@ -66,62 +66,71 @@ def App():
         carousel,
         
         # Grid of widgets demonstrating props
-        ui.Grid(children=[
-            # Row 1
-            ui.Button(
-                text="Styled Button",
-                props={
-                    "background-color": "#4caf50",
-                    "color": "white",
-                    "border": "none",
-                    "padding": "12px 24px",
-                    "border-radius": "6px",
-                    "font-weight": "bold"
-                }
-            ),
-            ui.Input(
-                placeholder="Styled input field",
-                props={
-                    "border": "2px solid #2196f3",
-                    "border-radius": "4px",
-                    "padding": "8px",
-                    "font-size": "14px"
-                }
-            ),
-            ui.Checkbox(
-                text="Styled checkbox",
-                props={
-                    "color": "#ff5722",
-                    "font-weight": "bold"
-                }
-            ),
-            
-            # Row 2
-            ui.Switch(
-                text="Toggle switch",
-                props={
-                    "color": "#9c27b0",
-                    "margin": "10px 0"
-                }
-            ),
-            ui.RadioButton(
-                text="Radio option",
-                props={
-                    "color": "#607d8b",
-                    "font-style": "italic"
-                }
-            ),
-            ui.Label(
-                text="Styled label",
-                props={
-                    "background-color": "#fff3e0",
-                    "color": "#e65100",
-                    "padding": "8px",
-                    "border-radius": "4px",
-                    "border": "1px solid #ffcc02"
-                }
-            )
-        ], props={"gap": "15px", "padding": "20px"}),
+        ui.Grid(
+            children=[
+                # Row 1: (component, row, col, rowspan, colspan)
+                (ui.Button(
+                    text="Styled Button",
+                    props={
+                        "background-color": "#4caf50",
+                        "color": "white",
+                        "border": "none",
+                        "padding": "12px 24px",
+                        "border-radius": "6px",
+                        "font-weight": "bold"
+                    }
+                ), 0, 0, 1, 1),
+                
+                (ui.Input(
+                    placeholder="Styled input field",
+                    props={
+                        "border": "2px solid #2196f3",
+                        "border-radius": "4px",
+                        "padding": "8px",
+                        "font-size": "14px"
+                    }
+                ), 0, 1, 1, 1),
+                
+                (ui.Checkbox(
+                    text="Styled checkbox",
+                    props={
+                        "color": "#ff5722",
+                        "font-weight": "bold"
+                    }
+                ), 0, 2, 1, 1),
+                
+                # Row 2
+                (ui.Switch(
+                    text="Toggle switch",
+                    props={
+                        "color": "#9c27b0",
+                        "margin": "10px 0"
+                    }
+                ), 1, 0, 1, 1),
+                
+                (ui.RadioButton(
+                    text="Radio option",
+                    props={
+                        "color": "#607d8b",
+                        "font-style": "italic"
+                    }
+                ), 1, 1, 1, 1),
+                
+                (ui.Label(
+                    text="Styled label",
+                    props={
+                        "background-color": "#fff3e0",
+                        "color": "#e65100",
+                        "padding": "8px",
+                        "border-radius": "4px",
+                        "border": "1px solid #ffcc02"
+                    }
+                ), 1, 2, 1, 1)
+            ],
+            props={
+                "padding": "20px"
+            }
+        ),
         
         # Expandable sections
         ui.ExpandablePanel(
@@ -131,6 +140,10 @@ def App():
                 "background-color": "#e8f5e8",
                 "color": "#2e7d32",
                 "font-weight": "bold"
+            },
+            content_props={
+                "background-color": "#f9f9f9",
+                "padding": "15px"
             },
             children=[
                 ui.ScatterPlot(
@@ -151,6 +164,10 @@ def App():
                 "background-color": "#fff3e0",
                 "color": "#e65100",
                 "font-weight": "bold"
+            },
+            content_props={
+                "background-color": "#fafafa",
+                "padding": "15px"
             },
             children=[
                 ui.TreeView(

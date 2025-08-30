@@ -24,20 +24,26 @@ def App():
         header_props={
             "background-color": "#e3f2fd",
             "font-weight": "bold",
-            "padding": "12px"
+            "padding": "12px",
+            "border-radius": "8px 8px 0 0"
         },
         content_props={
             "background-color": "#f5f5f5",
-            "padding": "10px"
+            "padding": "15px",
+            "border-radius": "0 0 8px 8px"
         },
         children=[
             ui.TreeView(
                 data=tree_data,
                 expanded_nodes={"Documents", "Documents.Projects"},
                 on_select=lambda x: panel.set_title(f"Selected: {x}"),
+                height=250,
+                width=None,
                 props={
                     "background-color": "white",
-                    "border": "1px solid #ddd"
+                    "border": "2px solid #2196f3",
+                    "border-radius": "6px",
+                    "padding": "8px"
                 }
             )
         ]
@@ -57,94 +63,100 @@ def App():
                 }
             ),
             
-            # Main content in rows
+            # File Explorer Section
+            ui.Label(text="🌳 File Explorer with Dynamic Titles:", props={"font-weight": "bold", "font-size": "18px", "margin": "20px 0 10px 0"}),
+            panel,
+            
+            # Controls Section
+            ui.Label(text="🎛️ Interactive Controls:", props={"font-weight": "bold", "font-size": "16px", "margin": "15px 0 10px 0"}),
             ui.Row(children=[
-                # Left column - File explorer and controls
                 ui.Column(children=[
-                    panel,
-                    
-                    ui.Label(text="Interactive Controls:", props={"font-weight": "bold", "margin-top": "20px"}),
-                    
-                    # Slider with props
+                    ui.Label(text="Slider Control:", props={"font-weight": "bold", "margin-bottom": "3px", "font-size": "14px"}),
                     ui.Slider(
                         min=0, max=100, value=50,
                         on_change=lambda val: print(f"Slider: {val}"),
                         props={
-                            "margin": "10px 0",
+                            "margin": "3px 0 10px 0",
                             "background-color": "#f0f0f0"
                         }
                     ),
                     
-                    # Progress bar with props
+                    ui.Label(text="Progress Bar:", props={"font-weight": "bold", "margin-bottom": "3px", "font-size": "14px"}),
                     ui.ProgressBar(
                         min_val=0, max_val=100, default_val=75,
                         props={
-                            "height": "20px",
-                            "border-radius": "10px",
-                            "background-color": "#e0e0e0"
+                            "height": "18px",
+                            "margin": "3px 0 10px 0"
                         }
                     ),
                     
-                    # Link with props
                     ui.Link(
-                        text="Visit WinUp Documentation",
+                        text="📚 Documentation",
                         url="https://github.com/winup",
                         props={
-                            "font-size": "16px",
-                            "margin": "10px 0",
+                            "font-size": "14px",
+                            "margin": "5px 0",
                             "color": "#1976d2"
                         }
-                    ),
-                    
-                    # List widget
+                    )
+                ], props={"width": "48%", "margin-right": "2%"}),
+                
+                ui.Column(children=[
+                    ui.Label(text="Feature List:", props={"font-weight": "bold", "margin-bottom": "3px", "font-size": "14px"}),
                     ui.List(
-                        items=["Feature 1: TreeView fixed", "Feature 2: Props support", "Feature 3: Dynamic titles"],
+                        items=["✅ TreeView fixed", "✅ Props support", "✅ Dynamic titles"],
                         on_select=lambda item: print(f"Selected: {item}"),
+                        height=80,
                         props={
                             "background-color": "white",
                             "border": "1px solid #ccc",
-                            "margin": "10px 0"
+                            "border-radius": "4px",
+                            "font-size": "12px"
                         }
                     )
-                ], props={"width": "50%", "padding": "10px"}),
+                ], props={"width": "50%"})
+            ]),
+            
+            # Charts Section
+            ui.Label(text="📊 Chart Widgets with Props:", props={"font-weight": "bold", "font-size": "18px", "margin": "20px 0 10px 0"}),
+            ui.Row(children=[
+                ui.BarChart(
+                    data=chart_data,
+                    title="Quarterly Sales",
+                    props={
+                        "height": "180px",
+                        "width": "32%",
+                        "margin-right": "2%",
+                        "border": "2px solid #4caf50",
+                        "border-radius": "6px",
+                        "background-color": "white"
+                    }
+                ),
                 
-                # Right column - Charts and image
-                ui.Column(children=[
-                    ui.Label(text="Chart Widgets with Props:", props={"font-weight": "bold"}),
-                    
-                    # Bar chart
-                    ui.BarChart(
-                        data=chart_data,
-                        title="Quarterly Sales",
-                        props={
-                            "height": "200px",
-                            "margin": "10px 0",
-                            "border": "1px solid #ddd"
-                        }
-                    ),
-                    
-                    # Line chart
-                    ui.LineChart(
-                        data=line_data,
-                        title="Sales Trend",
-                        props={
-                            "height": "200px",
-                            "margin": "10px 0",
-                            "border": "1px solid #ddd"
-                        }
-                    ),
-                    
-                    # Pie chart
-                    ui.PieChart(
-                        data=pie_data,
-                        title="OS Market Share",
-                        props={
-                            "height": "200px",
-                            "margin": "10px 0",
-                            "border": "1px solid #ddd"
-                        }
-                    )
-                ], props={"width": "50%", "padding": "10px"})
+                ui.LineChart(
+                    data=line_data,
+                    title="Sales Trend",
+                    props={
+                        "height": "180px",
+                        "width": "32%",
+                        "margin-right": "2%",
+                        "border": "2px solid #2196f3",
+                        "border-radius": "6px",
+                        "background-color": "white"
+                    }
+                ),
+                
+                ui.PieChart(
+                    data=pie_data,
+                    title="OS Market Share",
+                    props={
+                        "height": "180px",
+                        "width": "32%",
+                        "border": "2px solid #ff9800",
+                        "border-radius": "6px",
+                        "background-color": "white"
+                    }
+                )
             ]),
             
             # Footer with status

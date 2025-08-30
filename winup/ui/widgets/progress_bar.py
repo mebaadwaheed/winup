@@ -9,6 +9,22 @@ class ProgressBar(QProgressBar):
         self.setRange(min_val, max_val)
         self.setValue(default_val)
         
+        # Set default styling for better appearance
+        self.setStyleSheet("""
+            QProgressBar {
+                border: 2px solid #ddd;
+                border-radius: 10px;
+                text-align: center;
+                font-weight: bold;
+                color: white;
+                background-color: #f0f0f0;
+            }
+            QProgressBar::chunk {
+                background-color: #4caf50;
+                border-radius: 8px;
+            }
+        """)
+        
         if props:
             style.styler.apply_props(self, props)
         
