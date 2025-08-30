@@ -2,10 +2,11 @@ from PySide6.QtWidgets import QWidget, QVBoxLayout
 from PySide6.QtCharts import QChart, QChartView, QBarSeries, QBarSet, QBarCategoryAxis, QValueAxis
 from PySide6.QtGui import QPainter, QColor
 from PySide6.QtCore import Qt
+from .... import style
 
 class BarChart(QWidget):
     """A stylish, modern bar chart widget."""
-    def __init__(self, data: dict = None, title: str = "", parent=None):
+    def __init__(self, data: dict = None, title: str = "", props: dict = None, parent=None):
         super().__init__(parent)
 
         self.chart = QChart()
@@ -14,6 +15,9 @@ class BarChart(QWidget):
         self.chart.setBackgroundBrush(QColor("transparent"))
         self.chart.legend().setVisible(True)
         self.chart.legend().setAlignment(Qt.AlignmentFlag.AlignBottom)
+        
+        if props:
+            style.styler.apply_props(self, props)
 
         self.series = QBarSeries()
         

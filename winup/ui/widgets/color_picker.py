@@ -8,6 +8,7 @@ class ColorPicker(Component):
         self,
         selected_color: str,
         on_change: callable = None,
+        props: dict = None,
         enable_alpha: bool = False,
         preset_colors: list = None,
         disabled: bool = False,

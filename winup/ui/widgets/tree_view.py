@@ -16,6 +16,7 @@ class TreeView(Component):
         style: dict = None,
         id: str = None,
         className: str = None,
+        props: dict = None,
     ):
         super().__init__(id=id, className=className, style=style)
         self.data = data
@@ -74,6 +75,13 @@ class TreeView(Component):
 
             if isinstance(value, dict):
                 self.populate_tree(item, value, unique_key)
+            elif isinstance(value, list):
+                # Handle list of items as child nodes
+                for i, list_item in enumerate(value):
+                    child_key = f"{unique_key}.{i}"
+                    child_item = QTreeWidgetItem(item)
+                    child_item.setText(0, str(list_item))
+                    self.node_map[child_key] = child_item
 
     def get_key_from_item(self, item_to_find):
         for key, item in self.node_map.items():

@@ -1,7 +1,7 @@
 from PySide6.QtWidgets import QCalendarWidget
 
 class Calendar(QCalendarWidget):
-    def __init__(self, parent=None):
+    def __init__(self, parent=None, props: dict = None):
         super().__init__(parent)
         self.setStyleSheet("""
             QCalendarWidget QToolButton {

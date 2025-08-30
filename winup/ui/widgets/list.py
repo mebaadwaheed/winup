@@ -9,6 +9,7 @@ class List(Component):
         self,
         items: list[str],
         selected_index: int = None,
+        props: dict = None,
         on_select: callable = None,
         multi_select: bool = False,
         ordered: bool = False,

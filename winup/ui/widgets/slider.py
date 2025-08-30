@@ -1,12 +1,13 @@
 from PySide6.QtWidgets import QSlider
 from PySide6.QtCore import Qt
+from ... import style
 
 class Slider(QSlider):
     """A more intuitive slider widget that allows for advanced styling."""
 
     def __init__(self, min: int = 0, max: int = 100, step: int = 1, value: int = 0, 
                  on_change: callable = None, horizontal: bool = True, 
-                 track_color: str = None, thumb_style: dict = None, parent=None):
+                 track_color: str = None, thumb_style: dict = None, props: dict = None, parent=None):
         
         orientation = Qt.Orientation.Horizontal if horizontal else Qt.Orientation.Vertical
         super().__init__(orientation, parent)
@@ -17,6 +18,9 @@ class Slider(QSlider):
         
         if on_change:
             self.valueChanged.connect(on_change)
+            
+        if props:
+            style.styler.apply_props(self, props)
             
         self.apply_styles(track_color, thumb_style)
 

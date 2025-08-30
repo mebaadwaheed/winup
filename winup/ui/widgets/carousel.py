@@ -31,6 +31,7 @@ class Carousel(QWidget):
         self,
         parent: QWidget = None,
         children: list = None,
+        props: dict = None,
         animation_duration: int = 400,
         autoplay_ms: int = 0,
         show_nav_buttons: bool = True,
