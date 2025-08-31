@@ -15,6 +15,9 @@ class Column(Frame):
         
         super().__init__(props=frame_props, parent=parent, **kwargs)
         
+        # Store original props for web conversion
+        self.props = props or {}
+        
         self.set_layout(VBox(props=layout_props))
         if children:
             for item in children:
@@ -38,6 +41,9 @@ class Row(Frame):
         layout_props = {k: v for k, v in layout_props.items() if v is not None}
         
         super().__init__(props=frame_props, parent=parent, **kwargs)
+
+        # Store original props for web conversion
+        self.props = props or {}
 
         self.set_layout(HBox(props=layout_props))
         if children:

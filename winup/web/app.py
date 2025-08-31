@@ -73,7 +73,16 @@ def _configure_app_routes(config: dict):
         script_manager.reset()
         
         # --- Render the content ---
-        page_content_html = target_component_func().render()
+        component_instance = target_component_func()
+        
+        # Check if it's a web component (returns HTML directly) or desktop component (QWidget)
+        if hasattr(component_instance, 'render') and callable(getattr(component_instance, 'render')):
+            # It's a QWidget from desktop component - convert to HTML
+            from .ui.component import component_to_html
+            page_content_html = component_to_html(component_instance)
+        else:
+            # It's already HTML from web component
+            page_content_html = str(component_instance)
         
         # --- Handle App Shell with RouterView ---
         if app_shell_path:
@@ -144,6 +153,8 @@ def web_run(
     title: str = "My App",
     favicon: Optional[str] = None,
     reload: bool = False,
+    metadata: Optional[dict] = None,
+    router: Optional[str] = None,
 ):
     if main_component_path and router_path:
         raise ValueError("You cannot provide both 'main_component_path' and 'router_path'.")
@@ -152,8 +163,15 @@ def web_run(
     if not main_component_path and not router_path:
         raise ValueError("You must provide either 'main_component_path' or 'router_path'.")
 
+    # Handle router parameter fallback
+    if router and not router_path:
+        router_path = router
+
     # --- Create config dict ---
     run_config = {"title": title, "favicon": favicon, "app_shell_path": app_shell_path}
+    if metadata:
+        run_config["metadata"] = metadata
+        
     if router_path:
         run_config["mode"] = "router"
         run_config["path"] = router_path

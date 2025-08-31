@@ -27,6 +27,9 @@ class Dock(QWidget):
         
         if props:
             self.apply_props(props)
+        
+        # Store props for web conversion
+        self.props = props
 
     def add_child(self, child: QWidget):
         """Adds a child to the dock's content area."""

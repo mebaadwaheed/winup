@@ -1,6 +1,6 @@
 [project]
 name = "winup"
-version = "2.5.7"
+version = "2.6.7"
 description = "A powerful, .exe Desktop and Web Application Python GUI framework built on top of PySide6."
 authors = [
     { name = "ebaadwaheed", email = "ebaadalt@gmail.com" }
@@ -43,7 +43,7 @@ Source = "https://github.com/mebaadwaheed/winup"
 Issues = "https://github.com/mebaadwaheed/winup/issues"
 
 [project.scripts]
-winup = "winup.cli.main:cli"
+winup = "winup.cli:main"
 
 [build-system]
 requires = ["setuptools>=61.0"]

@@ -48,3 +48,6 @@ class Switch(QCheckBox):
         """)
         if props:
             style.apply_props(self, props)
+        
+        # Store props for web conversion
+        self.props = props

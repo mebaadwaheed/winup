@@ -95,6 +95,9 @@ class ExpandablePanel(QWidget):
 
         # Connections
         self.toggle_button.toggled.connect(self.toggle)
+        
+        # Store props for web conversion
+        self.props = props
 
     def _on_animation_finished(self):
         """Called when the animation finishes."""

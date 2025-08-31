@@ -1,3 +1,16 @@
+# Version 2.6.7 LFR **(MAJOR):**
+- Added unified cross-platform component system with `@component(web=True, desktop=True)` decorator
+- Enhanced CLI with platform selection flags (`--desktop`, `--web`) and web-specific options
+- Added comprehensive props system with desktop/web correlation and styling support
+- Implemented `flex` property support for responsive layouts
+- Added web-specific parameters to `winup.run()` (web_title, web_port, web_router, etc.)
+- Fixed props storage for all widgets to enable proper web conversion
+- Created comprehensive documentation suite (component decorator, CLI commands, props reference)
+- Enhanced state management integration with cross-platform examples
+- Added hot reload support for both desktop and web platforms
+- Unified routing system that works across desktop tabs and web navigation
+## Contributors: @mebaadwaheed
+
 # Version 2.5.7 LSR **(MINOR):**
 - Fixed `None` on different properties
 - Fixed Props Init for most widgets

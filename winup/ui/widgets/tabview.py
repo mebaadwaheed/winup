@@ -9,6 +9,9 @@ class TabView(QTabWidget):
             self.addTab(widget, title)
         if props:
             style.apply_props(self, props)
+        
+        # Store props for web conversion
+        self.props = props
 
     def add_tab(self, widget: QWidget, label: str):
         self.addTab(widget, label)

@@ -28,11 +28,55 @@ from PySide6.QtCore import QTimer
 
 # --- Main API ---
 
-def run(main_component_path: str, title="WinUp App", width=800, height=600, icon=None, dev=False, menu_bar: Optional[shell.MenuBar] = None, tool_bar: Optional[shell.ToolBar] = None, status_bar: Optional[shell.StatusBar] = None, tray_icon: Optional[shell.SystemTrayIcon] = None):
+def run(main_component_path: str, title="WinUp App", width=800, height=600, icon=None, dev=False, menu_bar: Optional[shell.MenuBar] = None, tool_bar: Optional[shell.ToolBar] = None, status_bar: Optional[shell.StatusBar] = None, tray_icon: Optional[shell.SystemTrayIcon] = None, platform: Optional[str] = None, web_title: Optional[str] = None, web_favicon: Optional[str] = None, web_port: Optional[int] = None, web_metadata: Optional[dict] = None, web_router: Optional[str] = None, web_reload: Optional[bool] = None):
     """
     The main entry point for a WinUp application.
-    ... (docstring) ...
+    
+    Args:
+        main_component_path: Path to the main component (e.g., "app.main:App")
+        title: Window title
+        width: Window width
+        height: Window height
+        icon: Window icon
+        dev: Enable development mode with hot reload
+        menu_bar: Optional menu bar
+        tool_bar: Optional tool bar
+        status_bar: Optional status bar
+        tray_icon: Optional system tray icon
+        platform: Platform to run on ('desktop' or 'web'). If None, auto-detects.
+        web_title: Title for web page (overrides title when on web)
+        web_favicon: Path to favicon for web page
+        web_port: Port for web server (default: 8000)
+        web_metadata: Additional metadata for web page
+        web_router: Router configuration for web routing
+        web_reload: Enable hot reload for web mode (overrides dev for web)
     """
+    from .core.platform import set_platform, get_current_platform
+    
+    # Set platform if specified, otherwise use auto-detection
+    if platform:
+        set_platform(platform)
+    
+    current_platform = get_current_platform()
+    
+    # Handle web platform
+    if current_platform == 'web':
+        if web is None:
+            raise ImportError("Web dependencies not installed. Install with 'pip install winup[web]'")
+        
+        # Use web-specific parameters or fallback to general ones
+        web_config = {
+            'title': web_title or title,
+            'port': web_port or 8000,
+            'reload': web_reload if web_reload is not None else dev,
+            'favicon': web_favicon,
+            'metadata': web_metadata,
+            'router': web_router
+        }
+        
+        return web.web_run(main_component_path, **web_config)
+    
+    # Handle desktop platform (existing logic)
     # Initialize the style manager immediately, before any widgets are created.
     style.init_app(_winup_app.app)
 

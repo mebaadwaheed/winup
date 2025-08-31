@@ -21,6 +21,9 @@ class Image(QLabel):
         else:
             self._pixmap = QPixmap(src)
             self.set_pixmap(self._pixmap)
+        
+        # Store props for web conversion
+        self.props = props
 
     def _on_image_loaded(self, pixmap: QPixmap):
         self._pixmap = pixmap

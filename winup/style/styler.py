@@ -268,6 +268,30 @@ class Styler:
                 # Remove it anyway so it doesn't become invalid QSS
                 themed_props.pop("read-only")
                 print(f"Warning: 'read-only' prop used on a widget that doesn't support it.", file=sys.stderr)
+        
+        if "flex" in themed_props:
+            # Handle flex property for layout sizing
+            flex_value = themed_props.pop("flex")
+            try:
+                # Convert flex value to stretch factor for Qt layouts
+                stretch_factor = int(flex_value) if isinstance(flex_value, (int, str)) else 1
+                
+                # Apply stretch factor if widget is in a layout
+                parent = widget.parent()
+                if parent and hasattr(parent, 'layout') and parent.layout():
+                    layout = parent.layout()
+                    if hasattr(layout, 'setStretchFactor'):
+                        # For QHBoxLayout and QVBoxLayout
+                        layout.setStretchFactor(widget, stretch_factor)
+                    elif hasattr(layout, 'addWidget') and hasattr(layout, 'setColumnStretch'):
+                        # For QGridLayout - find widget position and set column stretch
+                        for i in range(layout.count()):
+                            if layout.itemAt(i).widget() == widget:
+                                row, col, rowspan, colspan = layout.getItemPosition(i)
+                                layout.setColumnStretch(col, stretch_factor)
+                                break
+            except (ValueError, TypeError):
+                print(f"Warning: Invalid flex value '{flex_value}', expected integer.", file=sys.stderr)
 
         # The rest of the props are assumed to be direct CSS properties
         style_str = ""

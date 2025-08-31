@@ -52,6 +52,9 @@ class Input(QLineEdit):
         if props:
             style.apply_props(self, props)
         
+        # Store props for web conversion
+        self.props = props
+        
         # Initial validation check
         self._on_text_changed(self.text())
 

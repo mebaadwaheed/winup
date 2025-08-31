@@ -5,7 +5,7 @@ import sys
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 import winup
-from winup import ui, shell, tasks, profiler
+from winup import ui, shell, tasks
 import time
 
 # --- 1. Define App Logic & Handlers ---

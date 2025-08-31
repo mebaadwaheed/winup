@@ -30,6 +30,9 @@ class List(Component):
         self.height = height
         self.width = width
 
+        # Store props for web conversion
+        self.props = props
+        
         # Layout and render the component
         layout = QVBoxLayout()
         layout.setContentsMargins(0, 0, 0, 0)

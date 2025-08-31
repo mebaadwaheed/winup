@@ -10,6 +10,9 @@ class Button(QPushButton):
         if on_click and on_click_enabled:
             self.clicked.connect(on_click)
 
+        # Store props for web conversion
+        self.props = props or {}
+        
         if props:
             style.apply_props(self, props)
 

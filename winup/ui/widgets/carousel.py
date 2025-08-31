@@ -105,6 +105,9 @@ class Carousel(QWidget):
             for child in children:
                 self.add_slide(child)
 
+        # Store props for web conversion
+        self.props = props
+
     def add_slide(self, widget: QWidget):
         """Adds a widget as a new slide in the carousel."""
         # Ensure the slide has an opacity effect for animation.

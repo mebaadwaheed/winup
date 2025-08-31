@@ -11,6 +11,9 @@ class Link(QLabel):
         self.tabs = tabs
         self.setText(f'<a href="{url}">{text}</a>')
         
+        # Store props for web conversion
+        self.props = props
+        
         if props:
             style.styler.apply_props(self, props)
         self.setStyleSheet("""

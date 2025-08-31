@@ -10,3 +10,6 @@ class ComboBox(QComboBox):
             style.apply_props(self, props)
         if on_change:
             self.currentTextChanged.connect(on_change)
+        
+        # Store props for web conversion
+        self.props = props

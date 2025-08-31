@@ -30,6 +30,9 @@ class Frame(QFrame):
             layout_type = props.pop("layout")
             self.set_layout(layout_type)
 
+        # Store props for web conversion
+        self.props = props
+
         # Apply the rest of the properties as styles
         if props:
             style.apply_props(self, props)

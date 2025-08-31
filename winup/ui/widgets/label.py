@@ -16,6 +16,9 @@ class Label(QLabel):
         if font_size:
             props['font-size'] = f"{font_size}px"
             
+        # Store props for web conversion
+        self.props = props
+        
         if props:
             style.apply_props(self, props)
 

@@ -4,7 +4,8 @@ from .router import Router, RouterLink, RouterView
 from . import tasks
 from . import memo
 from . import profiler
-from .component import component
+# Import the unified component decorator from core
+from ..core.component import component
 
 __all__ = [
     "ui", 
@@ -16,4 +17,4 @@ __all__ = [
     "component",
     "RouterLink",
     "RouterView"
-] 
+]

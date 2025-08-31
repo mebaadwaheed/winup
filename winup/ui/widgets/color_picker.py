@@ -29,6 +29,9 @@ class ColorPicker(Component):
         self.setLayout(layout)
         self.layout().addWidget(self.render())
 
+        # Store props for web conversion
+        self.props = props
+
     def render(self):
         widget = QPushButton()
         widget.setText(f"Color: {self.selected_color}")

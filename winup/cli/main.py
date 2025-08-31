@@ -153,6 +153,79 @@ def cli():
     pass
 
 @cli.command()
+@click.argument('app_path')
+@click.option('--desktop', is_flag=True, default=False, help='Run in desktop mode')
+@click.option('--web', is_flag=True, default=False, help='Run in web mode')
+@click.option('--title', default='WinUp App', help='Application window title')
+@click.option('--width', default=800, help='Application window width')
+@click.option('--height', default=600, help='Application window height')
+@click.option('--web-port', default=8000, help='Port for web server (web mode only)')
+@click.option('--web-title', help='Title for web page (overrides --title in web mode)')
+@click.option('--web-favicon', help='Path to favicon for web page')
+@click.option('--web-metadata', help='Additional metadata for web page (JSON string)')
+@click.option('--web-router', help='Router path for web routing (format: module.path:router)')
+@click.option('--web-reload', is_flag=True, default=False, help='Enable hot reload for web mode')
+@click.option('--reload', is_flag=True, default=False, help='Enable hot reload for development')
+@click.option('--router', help='Router path for web routing (format: module.path:router)')
+@click.option('--shell', help='App shell path for web routing (format: module.path:component)')
+def run(app_path, desktop, web, title, width, height, web_port, web_title, web_favicon, web_metadata, web_router, web_reload, reload, router, shell):
+    """Run a WinUp application with platform selection."""
+    import sys
+    import winup
+    from winup.core.platform import set_platform
+    
+    # Add current directory to Python path for module resolution
+    if os.getcwd() not in sys.path:
+        sys.path.insert(0, os.getcwd())
+    
+    # Determine platform
+    if web and desktop:
+        click.secho("Error: Cannot specify both --web and --desktop flags", fg="red")
+        return
+    elif web:
+        platform = 'web'
+    elif desktop:
+        platform = 'desktop'
+    else:
+        # Default to desktop if no platform specified
+        platform = 'desktop'
+    
+    # Set the platform before running
+    set_platform(platform)
+    
+    click.echo(f"Running {app_path} in {platform} mode...")
+    
+    try:
+        if platform == 'web':
+            # Parse web metadata if provided
+            parsed_metadata = None
+            if web_metadata:
+                try:
+                    import json
+                    parsed_metadata = json.loads(web_metadata)
+                except json.JSONDecodeError:
+                    click.secho("Warning: Invalid JSON in --web-metadata, ignoring", fg="yellow")
+            
+            # Use new winup.run() with web parameters
+            winup.run(
+                app_path, 
+                platform='web',
+                title=title,
+                web_title=web_title,
+                web_port=web_port,
+                web_favicon=web_favicon,
+                web_metadata=parsed_metadata,
+                web_router=web_router or router,
+                web_reload=web_reload,
+                dev=reload
+            )
+        else:
+            # Use desktop runner
+            winup.run(app_path, title=title, width=width, height=height, dev=reload)
+    except Exception as e:
+        click.secho(f"Error running application: {e}", fg="red")
+
+@cli.command()
 def init():
     """Initializes a new WinUp project."""
     click.echo("🚀 Welcome to WinUp! Let's create a new project.")

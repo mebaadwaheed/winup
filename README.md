@@ -19,6 +19,8 @@
 
 `pip install winup==2.5.7`
 
+### For the old way which doesn't use component based platform rendering see [here](tests), for the new component based rendering way see [here](examples).
+
 **A ridiculously Pythonic and powerful framework for building beautiful desktop applications.**
 
 WinUp is a modern UI framework for Python that wraps the power of PySide6 (Qt) in a simple, declarative, and developer-friendly API. It's designed to let you build applications faster, write cleaner code, and enjoy the development process.
@@ -105,13 +107,15 @@ Desktop development in Python can feel clunky. WinUp was built to fix that.
 Dive deeper into the features of WinUp:
 
 ## Core Concepts
+- [**Getting Started**](docs/gettingstarted.md)
 - [**Component Model & Styling**](docs/concepts.md)
+- [**Cross-Platform Component Decorator**](docs/component-decorator.md)
 - [**State Management**](docs/state.md)
-- [**Lifecycle Hooks**](docs/concepts.md#component-lifecycle-hooks-on_mount-and-on_unmount)
-- [**Routing**](docs/concepts.md#routing)
+- [**Routing**](docs/routing.md)
 - [**Absolute Positioning (Advanced)**](docs/absolute-layout.md)
 
 ## Developer Tools
+- [**CLI Commands Reference**](docs/cli-commands.md)
 - [**Live Hot Reload (LHR)**](docs/live-hot-reload.md)
 - [**Performance Profiler**](docs/profiler.md)
 - [**Memoization**](docs/memoization.md)
@@ -120,6 +124,7 @@ Dive deeper into the features of WinUp:
 
 ## UI Components
 - [**Full Component Library**](docs/components/README.md)
+- [**Props Reference Guide**](docs/props-reference.md)
 
 ---
 

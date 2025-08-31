@@ -8,6 +8,9 @@ class RadioButton(QRadioButton):
             self.toggled.connect(on_toggle)
         if props:
             style.apply_props(self, props)
+        
+        # Store props for web conversion
+        self.props = props
 
     def set_text(self, text: str):
         self.setText(text)

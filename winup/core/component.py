@@ -2,6 +2,7 @@ import functools
 import inspect
 from typing import Callable
 from PySide6.QtWidgets import QWidget, QVBoxLayout
+from .platform import get_current_platform, validate_platform_compatibility
 
 class Component(QWidget):
     """A base class for all WinUp components, handling lifecycle events."""
@@ -90,35 +91,95 @@ class Component(QWidget):
         if self.on_unmount_handler:
             self.on_unmount_handler()
 
-def component(func):
+def component(func=None, *, platforms=None, web=False, desktop=True):
     """
     A decorator that turns a function into a Component class factory.
-    It now supports on_mount and on_unmount lifecycle hooks.
-    """
-    @functools.wraps(func)
-    def wrapper(*args, **kwargs):
-        # We no longer need to extract hooks here, as they are passed to child widgets.
+    It now supports on_mount and on_unmount lifecycle hooks and platform targeting.
+    
+    Args:
+        func: The component function to decorate
+        platforms: List of platforms this component supports ('web', 'desktop')
+        web: Boolean flag to enable web platform (default: False)
+        desktop: Boolean flag to enable desktop platform (default: True)
+    
+    Usage:
+        @component
+        def MyComponent(): ...
         
-        # The user's function now doesn't need to accept args, just kwargs (props)
-        # We bind the args to the function signature to create the props dict
-        sig = inspect.signature(func)
-        try:
-            bound_args = sig.bind(*args, **kwargs)
-        except TypeError as e:
-            # Provide a more helpful error message
-            raise TypeError(f"Error calling component '{func.__name__}': {e}. Check the arguments being passed.")
+        @component(platforms=['web', 'desktop'])
+        def CrossPlatformComponent(): ...
+        
+        @component(web=True, desktop=False)
+        def WebOnlyComponent(): ...
+    """
+    def decorator(func):
+        # Determine supported platforms
+        supported_platforms = set()
+        
+        if platforms:
+            supported_platforms.update(platforms)
+        else:
+            if desktop:
+                supported_platforms.add('desktop')
+            if web:
+                supported_platforms.add('web')
+        
+        # If no platforms specified, default to desktop
+        if not supported_platforms:
+            supported_platforms.add('desktop')
+        
+        # Store platform info on the function
+        func._winup_platforms = supported_platforms
+        
+        @functools.wraps(func)
+        def wrapper(*args, **kwargs):
+            # Get current platform context
+            current_platform = get_current_platform()
             
-        bound_args.apply_defaults()
-        props = dict(bound_args.arguments)
-
-        # The render function to be passed to the Component class
-        def render_function(**p):
-            return func(**p)
+            # Validate platform compatibility
+            validate_platform_compatibility(func, current_platform)
             
-        # The lifecycle hooks are now picked up from the returned widget inside Component.render
-        return Component(render_func=render_function, props=props)
+            # Handle web rendering
+            if current_platform == 'web' or 'web' in supported_platforms:
+                # For web components, return the function result directly
+                # This allows web components to return HTML/web elements
+                if current_platform == 'web':
+                    sig = inspect.signature(func)
+                    try:
+                        bound_args = sig.bind(*args, **kwargs)
+                    except TypeError as e:
+                        raise TypeError(f"Error calling component '{func.__name__}': {e}. Check the arguments being passed.")
+                    bound_args.apply_defaults()
+                    return func(**dict(bound_args.arguments))
+            
+            # Handle desktop rendering (existing logic)
+            # The user's function now doesn't need to accept args, just kwargs (props)
+            # We bind the args to the function signature to create the props dict
+            sig = inspect.signature(func)
+            try:
+                bound_args = sig.bind(*args, **kwargs)
+            except TypeError as e:
+                # Provide a more helpful error message
+                raise TypeError(f"Error calling component '{func.__name__}': {e}. Check the arguments being passed.")
+                
+            bound_args.apply_defaults()
+            props = dict(bound_args.arguments)
 
-    # Attach the original function's signature to the wrapper.
-    # This helps avoid recursion issues with `inspect.signature` on decorated functions.
-    wrapper.__signature__ = inspect.signature(func)
-    return wrapper 
+            # The render function to be passed to the Component class
+            def render_function(**p):
+                return func(**p)
+                
+            # The lifecycle hooks are now picked up from the returned widget inside Component.render
+            return Component(render_func=render_function, props=props)
+
+        # Attach the original function's signature to the wrapper.
+        # This helps avoid recursion issues with `inspect.signature` on decorated functions.
+        wrapper.__signature__ = inspect.signature(func)
+        wrapper._winup_platforms = supported_platforms
+        return wrapper
+    
+    # Handle both @component and @component(...) syntax
+    if func is None:
+        return decorator
+    else:
+        return decorator(func)

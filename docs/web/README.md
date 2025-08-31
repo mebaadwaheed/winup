@@ -1,4 +1,5 @@
 # WinUp for Web Documentation
+## Please use the new component based rendering instead! [here](../component-decorator.md)
 
 Welcome to the documentation for WinUp's web framework. This framework allows you to build interactive, stateful web applications using only Python.
 

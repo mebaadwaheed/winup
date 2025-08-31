@@ -118,3 +118,103 @@ class Component:
 
     def __str__(self):
         return self.render()
+
+def component_to_html(qt_widget):
+    """Convert a Qt widget to HTML representation for web rendering."""
+    from PySide6.QtWidgets import QWidget, QLabel, QPushButton, QVBoxLayout, QHBoxLayout
+    
+    if hasattr(qt_widget, 'layout') and qt_widget.layout():
+        layout = qt_widget.layout()
+        html_parts = []
+        
+        # Handle different layout types
+        if isinstance(layout, (QVBoxLayout, QHBoxLayout)):
+            container_tag = "div"
+            
+            # Build CSS classes and styles
+            css_classes = []
+            inline_styles = []
+            
+            # Layout direction
+            if isinstance(layout, QVBoxLayout):
+                css_classes.append("flex flex-col")
+            else:
+                css_classes.append("flex flex-row")
+            
+            # Extract props from the widget if available
+            widget_props = getattr(qt_widget, 'props', {}) or {}
+            
+            # Handle alignment
+            alignment = widget_props.get('alignment', '')
+            if 'AlignCenter' in alignment or 'center' in alignment.lower():
+                css_classes.append("items-center justify-center")
+                inline_styles.append("text-align: center")
+            elif 'AlignLeft' in alignment or 'left' in alignment.lower():
+                css_classes.append("items-start justify-start")
+            elif 'AlignRight' in alignment or 'right' in alignment.lower():
+                css_classes.append("items-end justify-end")
+            
+            # Handle spacing
+            spacing = widget_props.get('spacing', layout.spacing())
+            if spacing and spacing > 0:
+                css_classes.append(f"gap-{min(spacing // 4, 12)}")  # Convert to Tailwind gap classes
+            
+            # Handle padding
+            padding = widget_props.get('padding', '')
+            if padding:
+                inline_styles.append(f"padding: {padding}")
+            
+            # Handle other CSS properties
+            for prop, value in widget_props.items():
+                if prop in ['background-color', 'color', 'border', 'border-radius', 'margin', 'width', 'height']:
+                    css_prop = prop.replace('_', '-')
+                    inline_styles.append(f"{css_prop}: {value}")
+            
+            # Build the opening tag
+            class_attr = f' class="{" ".join(css_classes)}"' if css_classes else ''
+            style_attr = f' style="{"; ".join(inline_styles)}"' if inline_styles else ''
+            
+            html_parts.append(f'<{container_tag}{class_attr}{style_attr}>')
+            
+            for i in range(layout.count()):
+                item = layout.itemAt(i)
+                if item and item.widget():
+                    widget = item.widget()
+                    html_parts.append(widget_to_html(widget))
+            
+            html_parts.append(f'</{container_tag}>')
+            
+        return ''.join(html_parts)
+    else:
+        return widget_to_html(qt_widget)
+
+def widget_to_html(widget):
+    """Convert individual Qt widgets to HTML."""
+    from PySide6.QtWidgets import QLabel, QPushButton
+    
+    # Extract props from widget if available
+    widget_props = getattr(widget, 'props', {}) or {}
+    
+    # Build inline styles from props
+    inline_styles = []
+    for prop, value in widget_props.items():
+        if prop in ['font-size', 'font-weight', 'color', 'background-color', 'padding', 'margin', 
+                   'margin-top', 'margin-bottom', 'margin-left', 'margin-right', 'border', 
+                   'border-radius', 'width', 'height', 'text-align']:
+            css_prop = prop.replace('_', '-')
+            inline_styles.append(f"{css_prop}: {value}")
+    
+    style_attr = f' style="{"; ".join(inline_styles)}"' if inline_styles else ''
+    
+    if isinstance(widget, QLabel):
+        text = widget.text() or ""
+        return f'<p{style_attr}>{text}</p>'
+    elif isinstance(widget, QPushButton):
+        text = widget.text() or "Button"
+        # Combine default button styles with custom props
+        default_classes = "px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+        return f'<button class="{default_classes}"{style_attr}>{text}</button>'
+    else:
+        # Generic widget fallback
+        class_name = widget.__class__.__name__
+        return f'<div class="widget-{class_name.lower()}"{style_attr}>Widget: {class_name}</div>'

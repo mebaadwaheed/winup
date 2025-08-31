@@ -22,6 +22,9 @@ class RichText(QTextEdit):
             
         if props:
             style.apply_props(self, props)
+        
+        # Store props for web conversion
+        self.props = props
     
     def _convert_to_qcolor(self, color_str: str) -> QBrush:
         """Convert a color string to a QBrush."""

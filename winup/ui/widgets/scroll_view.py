@@ -19,6 +19,9 @@ class ScrollView(QScrollArea):
 
         if props:
             style.apply_props(self, props)
+        
+        # Store props for web conversion
+        self.props = props
 
     def scroll_to_bottom(self):
         """Automatically scrolls to the bottom of the content."""

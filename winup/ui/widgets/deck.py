@@ -15,3 +15,6 @@ class Deck(QStackedWidget):
         if children:
             for child in children:
                 self.addWidget(child) 
+        
+        # Store props for web conversion
+        self.props = props

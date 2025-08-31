@@ -1,4 +1,5 @@
 from PySide6.QtWidgets import QCalendarWidget
+import datetime
 
 class Calendar(QCalendarWidget):
     def __init__(self, parent=None, props: dict = None):
@@ -35,3 +36,11 @@ class Calendar(QCalendarWidget):
                 selection-color: white; 
             }
         """)
+
+        if props:
+            style.apply_props(self, props)
+        
+        self.props = props
+
+    def set_date(self, date: datetime.date):
+        self.setSelectedDate(date)

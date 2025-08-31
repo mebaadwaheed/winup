@@ -29,6 +29,9 @@ class TreeView(Component):
         self.width = width
         self.node_map = {}
 
+        # Store props for web conversion
+        self.props = props
+        
         # Layout and render the component
         layout = QVBoxLayout()
         layout.setContentsMargins(0, 0, 0, 0)
